@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Daniel Trinh]]></title>
-  <link href="http://danieltrinh.com/atom.xml" rel="self"/>
+  <title><![CDATA[Category: maintainability | Daniel Trinh]]></title>
+  <link href="http://danieltrinh.com/blog/categories/maintainability/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
   <updated>2013-11-10T01:05:24-08:00</updated>
   <id>http://danieltrinh.com/</id>
@@ -18,7 +18,7 @@
     <link href="http://danieltrinh.com/blog/2013/11/09/maintaining-a-large-code-base-part-2/"/>
     <updated>2013-11-09T11:07:00-08:00</updated>
     <id>http://danieltrinh.com/blog/2013/11/09/maintaining-a-large-code-base-part-2</id>
-    <content type="html"><![CDATA[<p><a href="http://danieltrinh.com/blog/2013/11/05/maintaining-a-large-code-base-part-1/"><em>Previous Part: Backstory and the Basics</em></a></p>
+    <content type="html"><![CDATA[<p><a href="/blog/2013/11/05/maintaining-a-large-code-base-part-1/"><em>Previous Part: Backstory and the Basics</em></a></p>
 
 <p>How do you deal with a code base that&rsquo;s too large to handle? Try making it smaller &mdash;
 split it up into multiple smaller, separate code bases that communicate with
@@ -63,7 +63,7 @@ Jeff Bezos (CEO of Amazon) sent out a mandate to all engineering teams, requirin
 data and functionality to be exposed through services, with no hooks or backdoors for communicating
 between services. Everything was to be a stand-alone service with a well defined API, and every engineer would have to abide by this new rule, unless they wanted to be fired.</p>
 
-<p>Steve goes on to make a point that Bezos&#8217; reasoning for this was to be able
+<p>Steve goes on to make a point that Bezos' reasoning for this was to be able
 to sell Amazon&rsquo;s internal platform for managing servers (hence the no hooks thing),
 now known to us today as Amazon Web Services (AWS), but I&rsquo;m sure he was aware of the code maintainability
 benefits of splitting products up, and how it leads to <a href="http://zurb.com/word/two-pizza-team">smaller self contained teams</a>.</p>
@@ -139,7 +139,7 @@ the professor thought was more important than the other three programming assign
 I had from my three other professors, but wouldn&rsquo;t explain what was so important about it.</p>
 
 <p>Anyway, the assignments were mostly automatically graded, and it was quite rare
-for the teaching assistant or professor to take a look at students&#8217; code to
+for the teaching assistant or professor to take a look at students' code to
 provide coding style feedback. After the solution to an assignment was submitted,
 the code for it would pretty much never be touched again.</p>
 

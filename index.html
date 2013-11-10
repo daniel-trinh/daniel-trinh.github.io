@@ -9,9 +9,7 @@
 	<meta name="author" content="">
 
 	
-	<meta name="description" content="Jul 22nd, 2012 uptime The Problem With Pingdom Time to be Awesome - something.scala 1
-println(&quot;hello world&quot;) 1
-println(&quot;hello world& &hellip;">
+	<meta name="description" content="Nov 9th, 2013 essay, maintainability Maintaining a Large Code Base, Part 2: Service Oriented Architecture Previous Part: Backstory and the Basics &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -33,6 +31,18 @@ println(&quot;hello world& &hellip;">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-45587019-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
 
 </head>
 
@@ -46,7 +56,7 @@ println(&quot;hello world& &hellip;">
 	<script src="/javascripts/md5.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("daniel.s.trinh@gmail.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
 		});
 	</script>
 	
@@ -65,8 +75,6 @@ println(&quot;hello world& &hellip;">
 </nav>
 <nav id="sub-nav">
 	<div class="social">
-		
-			<a class="email" href="mailto:daniel.s.trinh@gmail.com" title="Email">Email</a>
 		
 		
 		
@@ -115,93 +123,113 @@ println(&quot;hello world& &hellip;">
   
 
 
-<time datetime="2012-07-22T19:13:00-07:00" data-updated="true" itemprop="datePublished">Jul 22<span>nd</span>, 2012</time></div>
+<time datetime="2013-11-09T11:07:00-08:00" data-updated="true" itemprop="datePublished">Nov 9<span>th</span>, 2013</time></div>
 		<div class="tags">
 
 
-	<a class='category' href='/blog/categories/uptime/'>uptime</a>
+	<a class='category' href='/blog/categories/essay/'>essay</a>, <a class='category' href='/blog/categories/maintainability/'>maintainability</a>
 
 </div>
 		
 	</div>
 
-	<h1 class="title" itemprop="name"><a href="/blog/2012/07/22/the-problem-with-pingdom/" itemprop="url">The Problem With Pingdom</a></h1>
+	<h1 class="title" itemprop="name"><a href="/blog/2013/11/09/maintaining-a-large-code-base-part-2/" itemprop="url">Maintaining a Large Code Base, Part 2: Service Oriented Architecture</a></h1>
 	<div class="entry-content" itemprop="articleBody">
-		
+		<p><a href="/blog/2013/11/05/maintaining-a-large-code-base-part-1/"><em>Previous Part: Backstory and the Basics</em></a></p>
 
-<figure class='code'><figcaption><span>Time to be Awesome - something.scala </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">println</span><span class="o">(</span><span class="s">&quot;hello world&quot;</span><span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>How do you deal with a code base that&rsquo;s too large to handle? Try making it smaller &mdash;
+split it up into multiple smaller, separate code bases that communicate with
+each other through well defined interfaces. When done with services
+at the server level, this is typically known as Service Oriented Architecture (SOA). SOA is just about applying the practices of code decoupling, clear interfaces, and code reuse at the scale of servers.</p>
 
+<h2>Service Oriented Architecture, AKA Don&rsquo;t Repeat Yourself for Servers</h2>
 
+<p>Twitter, Netflix, and Amazon all started out with monolithic, tightly coupled
+architectures in their infant years, and have all adopted the SOA approach as
+they&rsquo;ve grown.</p>
 
+<p>In Twitter&rsquo;s case, they started out with stuffing all functionality into single Ruby
+on Rails application, and later moved to the JVM, using Scala and Java, splitting
+their product into smaller services along the way.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">println</span><span class="o">(</span><span class="s">&quot;hello world&quot;</span><span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>From an <a href="http://blog.redfin.com/devblog/2010/05/how_and_why_twitter_uses_scala.html">interview with Alex Payne, a former Twitter engineer:</a></p>
 
+<blockquote><p>In the enterprise world, a service-oriented architecture is not new, but in Web 2.0
+it is crazy new science. With PHP or Ruby on Rails, when you need more functionality,
+you just include more plugins and libraries, shoving them all in to the server.
+The result is a giant ball of mud.</p>
 
+<p>So <em>anything that has to do heavy lifting in our stack is going to be an independent service.</em></p></blockquote>
 
+<p>They split one code base that handled the entirety of Twitter&rsquo;s functionality into several
+services, including a queuing service, a social graph store, a people search service,
+and a tweet streaming service, using Thrift (common RPC network protocol library) to tie their
+services together. Their system has become much more reliable <a href="http://www.whatisfailwhale.info/">ever</a>
+<a href="https://blog.twitter.com/2013/new-tweets-per-second-record-and-how">since</a>.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">sbt._</span>
-</span><span class='line'><span class="k">import</span> <span class="nn">Keys._</span>
-</span><span class='line'><span class="k">import</span> <span class="nn">com.typesafe.sbt.SbtScalariform</span>
-</span><span class='line'><span class="k">import</span> <span class="nn">com.typesafe.sbt.SbtScalariform.ScalariformKeys</span>
-</span><span class='line'><span class="k">import</span> <span class="nn">com.typesafe.sbt.SbtAtmos.</span><span class="o">{</span> <span class="nc">Atmos</span><span class="o">,</span> <span class="n">atmosSettings</span> <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>Netflix <a href="http://techblog.netflix.com/2012/06/netflix-operations-part-i-going.html">started off as a monolithic</a>
+Java application, and split their code base off into smaller services. The change
+also allowed them to split their engineering team into smaller teams on a per
+service basis. Engineers wanting to integrate their service with another service no longer had to search
+through mud to integrate with other features &mdash; they only had to be concerned
+about the interfaces.</p>
 
+<p>Amazon started doing SOA as early back as 2002. According to a
+<a href="https://plus.google.com/+RipRowan/posts/eVeouesvaVX">well known leaked rant by Steve Yegge</a>,
+Jeff Bezos (CEO of Amazon) sent out a mandate to all engineering teams, requiring all
+data and functionality to be exposed through services, with no hooks or backdoors for communicating
+between services. Everything was to be a stand-alone service with a well defined API, and every engineer would have to abide by this new rule, unless they wanted to be fired.</p>
 
+<p>Steve goes on to make a point that Bezos&#8217; reasoning for this was to be able
+to sell Amazon&rsquo;s internal platform for managing servers (hence the no hooks thing),
+now known to us today as Amazon Web Services (AWS), but I&rsquo;m sure he was aware of the code maintainability
+benefits of splitting products up, and how it leads to <a href="http://zurb.com/word/two-pizza-team">smaller self contained teams</a>.</p>
 
+<p>If you are still wondering why this works so well&hellip; Well, it&rsquo;s almost impossible for one engineer to
+understand every detail in a giant monolithic application. If an engineer
+doesn&rsquo;t know how some code works, the chances of them being able to reliably
+modify it are slim. By splitting up responsibilities into services, engineers
+can be assigned to work on specific services, limiting how much they need to know. So it helps in the division of labor in a larger software organization.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">val</span> <span class="n">appName</span>         <span class="k">=</span> <span class="s">&quot;Sprawler&quot;</span>
-</span><span class='line'>  <span class="k">val</span> <span class="n">appVersion</span>      <span class="k">=</span> <span class="s">&quot;0.2.0&quot;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">val</span> <span class="n">appDependencies</span> <span class="k">=</span> <span class="n">sprayDeps</span> <span class="o">++</span>
-</span><span class='line'>    <span class="n">playDeps</span> <span class="o">++</span>
-</span><span class='line'>    <span class="n">akkaDeps</span> <span class="o">++</span>
-</span><span class='line'>    <span class="n">miscDeps</span> <span class="o">++</span>
-</span><span class='line'>    <span class="n">testDeps</span> <span class="o">++</span>
-</span><span class='line'>    <span class="n">crawlerDeps</span> <span class="o">++</span>
-</span><span class='line'>    <span class="nc">Seq</span><span class="o">(</span>
-</span><span class='line'>      <span class="s">&quot;org.scala-lang&quot;</span> <span class="o">%</span> <span class="s">&quot;scala-compiler&quot;</span> <span class="o">%</span> <span class="n">V</span><span class="o">.</span><span class="nc">Scala</span>
-</span><span class='line'>    <span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>As Steve mentions in his rant, it&rsquo;s also a good way of dogfooding services, which happens
+when the team behind one service has to integrate with the interface of another
+team&rsquo;s interface.</p>
 
+<p>The other obvious benefit of splitting things into strict independent services is
+the potential for open sourcing the services, just as <a href="http://twitter.github.io/">Twitter</a> and <a href="http://netflix.github.io/#repo">Netflix</a>
+have done. Open source means more contributors (if it&rsquo;s good enough for others to use) and
+more dogfooding. Or, if it&rsquo;s <em>really</em> good, you could sell the service, like Amazon has done
+with AWS.</p>
 
-<p><a href="http://www.pingdom.com%20Pingdom">The problem with pingdom.</a></p>
+<h3>Some Basic Service to Service Examples</h3>
 
-<p>My money&rsquo;s in that office, right? If she start giving me some bullshit about it ain&rsquo;t there, and we got to go someplace else and get it, I&rsquo;m gonna shoot you in the head then and there. Then I&rsquo;m gonna shoot that bitch in the kneecaps, find out where my goddamn money is. She gonna tell me too. Hey, look at me when I&rsquo;m talking to you, motherfucker. You listen: we go in there, and that nigga Winston or anybody else is in there, you the first motherfucker to get shot. You understand?</p>
+<p>An example of SOA that&rsquo;s perhaps more well known is the movement of
+generating GUIs from the server to the client, and having the server side code serve pure data
+over HTTP, websockets, or some other protocol. This is the idea behind
+the Javascript GUI frameworks such as Backbone.js and Angular.js. By building
+UI on top of an API that servers data, the API gets used and tested in the process
+of building the API. If the API is good enough, it can be opened to the public!
+Now if users don&rsquo;t like your GUI, they can build their own.</p>
 
-<blockquote><p>Blockquote is what goes
-inside this block here
-would you believe that
-bullshit?</p></blockquote>
+<p>That same API could also be <a href="http://spray.io/wjax/#/41">split into a separate</a> service that talks to other services that handle the actual business logic. To directly paraphrase from the link, the API layer would only handle authentication, request routing, serialization and deserialization of objects, and request caching.</p>
 
-<p>Well, the way they make shows is, they make one show. That show&rsquo;s called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they&rsquo;re going to make more shows. Some pilots get picked and become television programs. Some don&rsquo;t, become nothing. She starred in one of the ones that became nothing.</p>
+<p>So what if you aren&rsquo;t building servers or applications that have to talk over the network? The same principle of splitting things into separate code bases and communicating through a common
+protocol can be applied to smaller scale programs as well.</p>
 
-<p>The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother&rsquo;s keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee.</p>
+<h3>The future of IDEs</h3>
 
-<p>Your bones don&rsquo;t break, mine do. That&rsquo;s clear. Your cells react to bacteria and viruses differently than mine. You don&rsquo;t get sick, I do. That&rsquo;s also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We&rsquo;re on the same curve, just on opposite ends.</p>
+<p>Ever used an IDE such as Eclipse, Intellij Idea, or Visual Studio? If you&rsquo;ve ever thought to yourself,
+<em>&ldquo;man, I really like the IDE auto completion, incremental compilation, and refactoring tools,
+but I wish I could be using Emacs / Vim / Sublime Text / Microsoft Word for the text editing instead.&rdquo;</em>, it&rsquo;s technically possible to write an IDE that would let you do this, even if the aforementioned IDEs can&rsquo;t.</p>
 
-<p>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? Do you see a little Asian child with a blank expression on his face sitting outside on a mechanical helicopter that shakes when you put quarters in it? No? Well, that&rsquo;s what you see at a toy store. And you must think you&rsquo;re in a toy store, because you&rsquo;re here shopping for an infant named Jeb.</p>
+<p><a href="https://github.com/nsf/gocode">Gocode</a>,
+<a href="https://github.com/aemoncannon/ensime">Ensime</a>, and
+<a href="http://common-lisp.net/project/slime/">Slime</a> are IDE daemons for the Golang, Scala, and Common Lisp programming languages, respectively. They communicate
+over a protocol to any capable text editor &mdash; the daemon receives code from the editor and some commands, executes the commands on the specified code, and returns any necessary text deltas back to the text editor.</p>
+
+<p>Speaking of programming languages&hellip;</p>
+
+<p><em>Coming Next: Programming Languages</em></p>
 
 		
 		
@@ -223,29 +251,170 @@ bullshit?</p></blockquote>
   
 
 
-<time datetime="2012-07-22T08:23:00-07:00" data-updated="true" itemprop="datePublished">Jul 22<span>nd</span>, 2012</time></div>
+<time datetime="2013-11-05T12:36:00-08:00" data-updated="true" itemprop="datePublished">Nov 5<span>th</span>, 2013</time></div>
 		<div class="tags">
 
 
-	<a class='category' href='/blog/categories/self/'>self</a>
+	<a class='category' href='/blog/categories/essay/'>essay</a>, <a class='category' href='/blog/categories/maintainability/'>maintainability</a>
 
 </div>
 		
 	</div>
 
-	<h1 class="title" itemprop="name"><a href="/blog/2012/07/22/intro/" itemprop="url">Intro</a></h1>
+	<h1 class="title" itemprop="name"><a href="/blog/2013/11/05/maintaining-a-large-code-base-part-1/" itemprop="url">Maintaining a Large Code Base, Part 1: Backstory and the Basics</a></h1>
 	<div class="entry-content" itemprop="articleBody">
-		<p>Testing!</p>
+		<p>What&rsquo;s one of the most important quality of good software?</p>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sollicitudin, massa eu vestibulum laoreet, nibh ante vulputate lorem, ac lobortis ante tellus eu mi. Duis sem nisi, luctus at feugiat eget, fringilla ut tellus. Nam a molestie justo. Sed pulvinar est vitae tellus semper tincidunt. Fusce euismod luctus lacus nec placerat. Mauris rutrum scelerisque nulla ut tempor. Nunc porttitor posuere mi, aliquet vehicula lorem feugiat in. Ut ut fermentum risus. Aliquam tincidunt ultricies ante sit amet bibendum. Cras nec sapien odio. Duis posuere congue sem, at congue massa faucibus at.</p>
+<p><em>It&rsquo;s maintainable.</em></p>
 
-<p>Integer ut sapien eget nisl auctor faucibus ut fermentum arcu. Nunc rutrum urna non risus congue et tristique felis eleifend. Maecenas blandit est eu mauris aliquam aliquet. Quisque porttitor enim eget risus blandit in mollis orci eleifend. Nam malesuada nulla sed lacus elementum placerat accumsan arcu rhoncus. Phasellus feugiat cursus turpis nec facilisis. Duis eget metus arcu, eget commodo velit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer cursus vulputate enim, vel gravida velit faucibus et. Ut a urna vitae tellus cursus rhoncus. Maecenas at odio eget quam cursus elementum. Aliquam vitae eros quis tellus laoreet accumsan sed id lorem. Suspendisse et rutrum leo. Integer scelerisque vestibulum adipiscing. In posuere, libero ac accumsan suscipit, nulla ligula gravida erat, ut tempor odio erat nec sem. Quisque justo ipsum, adipiscing volutpat varius vitae, blandit eget nisi.</p>
+<p>It doesn&rsquo;t matter how well optimized the code is if the code base isn&rsquo;t maintainable.
+If the code can&rsquo;t be refactored and improved, the software project is stuck in time &mdash;
+new features are difficult to add, performance can&rsquo;t be improved, and bugs will be harder to pinpoint.
+Upfront planning and design can greatly reduce the amount of code rewriting that is necessary,
+but its near impossible to get everything right the first time code is written in a significantly
+sized code base. I&rsquo;ve yet to work on a non trivial software project that was finished and
+perfect on the first iteration.</p>
 
-<p>Nullam adipiscing neque ac lacus commodo vitae imperdiet dui sollicitudin. Ut ac nunc augue. Nam at sem ut quam commodo aliquet vitae vitae dui. Vivamus scelerisque felis eget dolor cursus feugiat. Phasellus at dui sed lectus scelerisque pretium. Etiam nec massa ut justo vestibulum fringilla ac vitae urna. Morbi tortor erat, tempus sed consectetur at, elementum nec eros. Vivamus mattis arcu a sapien semper non lacinia eros pretium.</p>
+<p>Back when I was in college, the typical coding assignment involved writing a few hundred
+to a few thousand lines of code to solve some mind bending arbitrary assignment that
+the professor thought was more important than the other three programming assignments
+I had from my three other professors, but wouldn&rsquo;t explain what was so important about it.</p>
 
-<p>Proin ut hendrerit arcu. Maecenas ullamcorper tristique magna vel mattis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam tincidunt euismod viverra. In sit amet neque turpis. Suspendisse ac sapien mi, id blandit purus. Ut tortor turpis, rutrum ac tempor at, accumsan sit amet erat. Etiam ultricies eleifend dolor, eget tempus justo tristique vitae. In hac habitasse platea dictumst. Aliquam eu enim neque.</p>
+<p>Anyway, the assignments were mostly automatically graded, and it was quite rare
+for the teaching assistant or professor to take a look at students&#8217; code to
+provide coding style feedback. After the solution to an assignment was submitted,
+the code for it would pretty much never be touched again.</p>
 
-<p>Morbi massa lorem, viverra non dictum at, malesuada vel nibh. Nam fermentum lobortis varius. Sed a nulla lacus, quis posuere risus. Nunc id urna libero, quis rutrum mi. In gravida felis urna. Praesent nec dolor ac urna tempor fermentum. Curabitur rutrum arcu et lorem volutpat viverra.</p>
+<p>Since the assignments were written to facilitate the learning of specific computer science concepts, the source
+code for the assignment solutions were very rarely useful outside of the context of the class
+that it was presented in. There was pretty much always a better implementation for whatever data structure
+or algorithm that were being implemented in the assignments. The only reason to keep the
+source code was to be able to look back at it in several years and could go, &ldquo;Yep.. I wrote that wonderful piece of turd.&rdquo;</p>
+
+<p>I ended up getting better and better at solving these types of self contained
+assignments, but I never really learned how to write maintainable code from completing
+those assignments.</p>
+
+<p>Fast forward a few years, the largest code base I&rsquo;ve worked on has gone from
+being somewhere around 10,000 source lines of code (SLOC) in Java, a naturally verbose language,
+to the largest code base being a 900,000 SLOC service written in <em>Ruby</em>,
+a <a href="http://stackoverflow.com/a/4205396/1093160">duck-type-able</a> dynamic language that&rsquo;s known for its conciseness.
+That line count doesn&rsquo;t include comments or blank spaces, as you might expect from &ldquo;source lines,
+and that code base also only refers to one code base &mdash; it was one of many.
+It wasn&rsquo;t a code base that I could submit somewhere, forget about and never see again either. This was
+the real deal &mdash; industry programming, where things get reused.</p>
+
+<p>This code base was something that I had to stare at on a daily basis. Needless to say,
+I&rsquo;ve learned many lessons in having to work with a code base of that size, and I&rsquo;m writing
+this to help software engineers, including myself, to think about code maintainability to the same degree they might
+think about code correctness or performance, if not higher.</p>
+
+<h2>Basics</h2>
+
+<p>Let&rsquo;s get the obvious software practices that happen to help code maintainability
+out of the way first. These should be familiar with anyone who&rsquo;s been coding for a while.</p>
+
+<h3>Don&rsquo;t Repeat Yourself</h3>
+
+<p>What do you do when you&rsquo;ve got a function duplicated 100 times over 100 different
+files, and you want to modify the behavior of that common code? Refactor the common code into one function somewhere,
+and have the code in those 100 files use that common code.</p>
+
+<p>This is important for maintenance so that if the behavior
+of the common code needs to be changed (and the interface is the same),
+it can be done in one single location, instead of once per location it is duplicated.</p>
+
+<p>This might seem too obvious to mention, but the convenience of copy paste seems to
+win quite often, since it&rsquo;s easier do than to refactor code, which might bring bugs.
+Copying and pasting code guarantees your own code won&rsquo;t affect anyone elses, but
+it causes maintenance headaches later on.</p>
+
+<p>Sometimes this isn&rsquo;t always a good thing, especially if the code refactoring involves
+metaprogramming or other language features that tend to make code less readable.</p>
+
+<h3>Eat Your Own Dog Food (Dogfooding)</h3>
+
+<p>If nobody has ever used your application before shipping it to customers, how can
+you be sure it&rsquo;s any good?</p>
+
+<p>Dogfooding is about using your own product whenever possible. If it&rsquo;s bad,
+hopefully the pain from using the product will be motivating enough to make it
+better.</p>
+
+<p>The term supposedly <a href="http://en.wikipedia.org/wiki/Eating_your_own_dog_food#Origin">originated in Microsoft</a>, and apparently they were trying to get the term changed to
+<a href="http://www.bizjournals.com/seattle/blog/techflash/2009/11/turning_dog_food_into_ice_cream_and_other_tidbits_from_microsofts_cio.html">icecreaming</a>.</p>
+
+<p>I&rsquo;ll be referring to it as dogfooding though, because that&rsquo;s what most people know it by,
+and it doesn&rsquo;t really make sense to dogfood icecream, because icecream is already delicious
+and is not dog food quality food, so it doesn&rsquo;t need to be dogfooded to be improved. Or in English,
+products that are already good (icecream) don&rsquo;t need to be improved.</p>
+
+<p>Dogfooding doesn&rsquo;t have to be limited to using something at the scale of products, though.
+Testing could be considered a form of dogfooding&hellip;</p>
+
+<h3>Write Unit Tests</h3>
+
+<p>How can you refactor and change code reliably if there are no checks in place to
+make sure the application is working as expected after the change?</p>
+
+<p>These are necessary to quickly catch errors in the business logic of your application.
+With dynamic languages, unit tests are also necessary to catch typos, missing method declarations,
+and type errors that would be caught in statically typed languages. By having a
+framework for quickly checking correctness, it&rsquo;ll be that much easier to reorganize your code, add
+features, fix bugs, and possibly splitting it into reusable libraries or services.</p>
+
+<p>Unit tests are really important in dynamic language code bases. Without
+a compiler to perform semantic analysis, the next safety net after unit tests are
+integration tests, and then it&rsquo;s your manual testers, then customers. Each step
+along the way is typically slower than the previous, with
+<a href="http://blogs.msdn.com/cfs-filesystemfile.ashx/__key/communityserver-blogs-components-weblogfiles/00-00-01-32-02-metablogapi/7317.image_5F00_0F65063B.png%20just%20ship%20it">having customers do your testing</a> generally much slower than running a unit test.</p>
+
+<h3>Document Your Code</h3>
+
+<p>Sometimes it&rsquo;s a lot easier to explain in words what your code does than
+it is to try to read the code itself, especially if your programming language is not
+particularly concise (more on this in part 3). A few comments here and there
+can greatly increase the understandability of your code.</p>
+
+<h3>Do Code Reviews and Design Reviews</h3>
+
+<p>So how do you go about figuring out what code needs to be better documented?</p>
+
+<p>Ever write a piece of software, come back to it later some time later,
+and have no idea how it works until you sit down and stare at it until your
+eyes bleed and you want to rewrite your entire code base from scratch? Me neither.
+But for those that this does happen to, it is probably time to dogfood your designs or your code to others.</p>
+
+<p>The writing courses I took in college made a point of having peer reviews for essays.
+Peer reviews exist because sometimes things that sound smart in your head do not
+read smart when written out on paper. Your peers can offer their own views
+on what you are writing that can strengthen your existing ideas. And sometimes,
+peer reviews are useful simply because you were too lazy to proof-read your essay
+on comparing book X about a topic only the professor cares about, to book Y about who knows what,
+mainly because you were too busy trying to complete the three programming assignments from your three other professors.</p>
+
+<p>Code reviews were almost never part of the curriculum for any of my computer science
+classes, neither by peers nor the teaching staff. Code reviews by peers weren&rsquo;t allowed because they
+couldn&rsquo;t trust us not to cheat, and they couldn&rsquo;t trust us not to save solutions for future students during the next iteration of the course. Code reviews by teaching assistants or professors
+couldn&rsquo;t be done for everyone because of the numbers problem &mdash; it was too much work
+for a couple of people to review the code of thirty students while also coding
+automated testing systems for homework solutions, doing research,
+and preparing course material, exams, and lectures &mdash; so it was easier to just not
+do it for anyone.</p>
+
+<p>Anyway, have someone else try to read your code. When you are programming, there
+is a significant amount of context that is in your short term memory that
+might not be obvious or apparent for someone else who didn&rsquo;t write the code.
+The process of coding is like storing info about how your code works in RAM,
+and for someone else reading it, they don&rsquo;t have the contents of your RAM &mdash; they have
+to reconstitute what was in your RAM into their own RAM by <a href="http://en.wikipedia.org/wiki/Lossy_data_conversion">lossily</a>
+interpreting it from your code. Good code results in equivalent RAM in both parties, and bad code is like trying to
+interpret a Picasso painting, where one person thinks it&rsquo;s a man&rsquo;s face looking to
+the side, and another thinks it&rsquo;s a woman&rsquo;s face looking towards the viewer, when it&rsquo;s really a picture of a plane.</p>
+
+<p>Okay, so it&rsquo;s not quite like that, but what I&rsquo;m trying to say is to dog-food the readability of your code, otherwise its going to be very hard for you to modify your code if you don&rsquo;t understand it.</p>
+
+<p><a href="http://localhost:4000/blog/2013/11/09/maintaining-a-large-code-base-part-2/"><em>Next Part: Service Oriented Architecture</em></a></p>
 
 		
 		
@@ -267,21 +436,24 @@ bullshit?</p></blockquote>
 </footer>
 			
 
+<script type="text/javascript">
+      var disqus_shortname = 'danieltrinh';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 
 
 
 
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
 
 
 
