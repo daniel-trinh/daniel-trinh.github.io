@@ -4,11 +4,11 @@
   <title><![CDATA[Category: maintainability | Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/blog/categories/maintainability/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2013-11-10T01:05:24-08:00</updated>
+  <updated>2013-11-12T21:04:35-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[]]></name>
-    
+    <email><![CDATA[daniel.s.trinh@gmail.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
@@ -138,7 +138,7 @@ to a few thousand lines of code to solve some mind bending arbitrary assignment 
 the professor thought was more important than the other three programming assignments
 I had from my three other professors, but wouldn&rsquo;t explain what was so important about it.</p>
 
-<p>Anyway, the assignments were mostly automatically graded, and it was quite rare
+<p>Anyway, the assignments were mostly automaticallyg graded, and it was quite rare
 for the teaching assistant or professor to take a look at students' code to
 provide coding style feedback. After the solution to an assignment was submitted,
 the code for it would pretty much never be touched again.</p>
@@ -196,8 +196,7 @@ metaprogramming or other language features that tend to make code less readable.
 you be sure it&rsquo;s any good?</p>
 
 <p>Dogfooding is about using your own product whenever possible. If it&rsquo;s bad,
-hopefully the pain from using the product will be motivating enough to make it
-better.</p>
+hopefully the pain from using the product will be motivating enough to improve it.</p>
 
 <p>The term supposedly <a href="http://en.wikipedia.org/wiki/Eating_your_own_dog_food#Origin">originated in Microsoft</a>, and apparently they were trying to get the term changed to
 <a href="http://www.bizjournals.com/seattle/blog/techflash/2009/11/turning_dog_food_into_ice_cream_and_other_tidbits_from_microsofts_cio.html">icecreaming</a>.</p>
@@ -249,7 +248,7 @@ read smart when written out on paper. Your peers can offer their own views
 on what you are writing that can strengthen your existing ideas. And sometimes,
 peer reviews are useful simply because you were too lazy to proof-read your essay
 on comparing book X about a topic only the professor cares about, to book Y about who knows what,
-mainly because you were too busy trying to complete the three programming assignments from your three other professors.</p>
+mainly because you were busy trying to complete the three programming assignments from your three other professors.</p>
 
 <p>Code reviews were almost never part of the curriculum for any of my computer science
 classes, neither by peers nor the teaching staff. Code reviews by peers weren&rsquo;t allowed because they
@@ -258,7 +257,7 @@ couldn&rsquo;t be done for everyone because of the numbers problem &mdash; it wa
 for a couple of people to review the code of thirty students while also coding
 automated testing systems for homework solutions, doing research,
 and preparing course material, exams, and lectures &mdash; so it was easier to just not
-do it for anyone.</p>
+do it for anyone. At least it was fair.</p>
 
 <p>Anyway, have someone else try to read your code. When you are programming, there
 is a significant amount of context that is in your short term memory that
