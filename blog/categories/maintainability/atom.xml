@@ -4,7 +4,7 @@
   <title><![CDATA[Category: maintainability | Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/blog/categories/maintainability/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2013-11-14T19:09:30-08:00</updated>
+  <updated>2013-12-18T22:12:59-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -271,7 +271,7 @@ the side, and another thinks it&rsquo;s a woman&rsquo;s face looking towards the
 
 <p>Okay, so it&rsquo;s not quite like that, but what I&rsquo;m trying to say is to dog-food the readability of your code, otherwise its going to be very hard for you to modify your code if you don&rsquo;t understand it.</p>
 
-<p><a href="http://localhost:4000/blog/2013/11/09/maintaining-a-large-code-base-part-2/"><em>Next Part: Service Oriented Architecture</em></a></p>
+<p><a href="/blog/2013/11/09/maintaining-a-large-code-base-part-2/"><em>Next Part: Service Oriented Architecture</em></a></p>
 ]]></content>
   </entry>
   
