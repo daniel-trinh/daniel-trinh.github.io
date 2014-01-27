@@ -4,9 +4,11 @@
 
 url: http://danieltrinh.com
 title: Daniel Trinh
-author:
+author: Daniel Trinh
 simple_search: http://google.com/search
-description: 
+description: > 
+               Software Engineer. RESTful API guy. Written and seen a lot of Ruby.  
+               <3 Scala, reactive programming, concurrency, and maintainable software.
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -19,7 +21,7 @@ subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
 email: daniel.s.trinh@gmail.com
-
+email_md5: 685bb9c0f2d690d3e4a910995a13f811
 # ----------------------- #
 #    Jekyll & Plugins     #
 # ----------------------- #
@@ -69,7 +71,7 @@ github_skip_forks: true
 
 # Twitter
 twitter_user:
-twitter_tweet_button: true
+# twitter_tweet_button: true
 
 linkedin_user: daniel-trinh/26/229/314
 
@@ -91,11 +93,11 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
-disqus_show_comment_count: true
+# disqus_short_name: danieltrinh
+disqus_show_comment_count: false
 
 # Google Analytics
-google_analytics_tracking_id:
+google_analytics_tracking_id: UA-45587019-1
 
 # Facebook Like
 facebook_user: media/set/?set=a.10201598454231151.1073741826.1472056878&type=1&l=2a00e2ff84
