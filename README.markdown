@@ -7,12 +7,14 @@ Story
 
 Add table of Contents to articles
 
-shrink font size, its too freaking big
-
-fix font size for firefox 
-
 Add recent posts
 
+Add "projects" section
+
+Add "articles" section
 
 ## Deploying / Updating articles:
+rake generate
+rake deploy
+(Enter username/password)
 
