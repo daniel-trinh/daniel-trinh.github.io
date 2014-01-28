@@ -232,7 +232,7 @@ above:</p>
 <p>Dynamic languages tend to win in terms of conciseness, since there&rsquo;s no extra
 code necessary for specifying type information, although this isn&rsquo;t always the case.</p>
 
-<h3>Language complexity</h3>
+<h3>Language Complexity</h3>
 
 <p>Unlike conciseness, language complexity isn&rsquo;t quite as clear cut to define. So
 instead of trying to define it in an abstract sense, I&rsquo;ll just give you some examples.</p>
@@ -266,11 +266,18 @@ Vector("a", "b", "c", "d", "e") map { x =&gt; x * 2 }
 // =&gt;  Vector[String] = Vector(aa, bb, cc, dd, ee)
 </code></pre>
 
-<p>In contrast, <a href="http://golang.org/">Golang</a> is far from being concise, but it is well reported for being relatively quick to pick up and start coding, likely in large part due to its incredibly minimal type system. It has no form of generics, meaning it is impossible to write type safe collection
-methods that apply to all types in the language itself. Golang is packaged with it&rsquo;s own
+<p>The implementation of the <code>map</code> function in Scala is far from simple, though. Writing
+this sort of code is not something the average Scala developer can accomplish. In fact,
+I&rsquo;m not sure there&rsquo;s more than a handful of people who could write a collections library
+as powerful as the one in Scala &mdash; it took the creator of the language and a few helpers an entire year to get it to the point it is currently at.</p>
+
+<p>Ruby, on the other hand, has an incredibly simple implementation of the <code>map</code> method.
+It&rsquo;s just a few lines of code, within the <a href="http://ruby-doc.org/core-2.1.0/Enumerable.html">Enumerable</a> module. To use it, all that is necessary is an implementation of the <code>each</code> function on the inheriting member, and that&rsquo;s it. Because of duck typing, there isn&rsquo;t much else that&rsquo;s needed.</p>
+
+<p>In contrast to both Scala and Ruby, <a href="http://golang.org/">Golang</a> is far from being concise, but it is well reported for being relatively quick to pick up and start coding, likely in large part due to its incredibly minimal type system. It has no form of generics, meaning it is impossible to write type safe collection methods that work with all types using just the language. Golang is packaged with it&rsquo;s own
 basic set of generic data structures (slices, maps, channels), but if you want to write
 your own priority queue that works with all types, you are out of luck. This means
-the language is easier to learn, but also results in more code and code duplication.</p>
+the language is easier to learn than a language like Scala, but also results in more code and code duplication.</p>
 
 <h3>Syntactic Flexibility</h3>
 
@@ -556,8 +563,7 @@ or building prototypes, it&rsquo;s not something I would choose if I had to work
 with more than a few engineers (or one that demanded performance, but that&rsquo;s another story).</p>
 
 <p>While I was working at RightScale, we had a massive 900,000 SLOC repository that contained way more
-business logic than it should have. The code base was a nightmare to maintain, and it had been that
-way for years, partially from the lack of time given to fix the problem, but also partly due to the nature of Ruby itself.</p>
+business logic than it should have. The code base was a nightmare to maintain, and it had been that way for years. This was partially from the lack of time given to fix the problem, partially from having fifty engineers modifying the same code base, but also partly due to the nature of Ruby itself.</p>
 
 <p>At one point, we really needed to start deprecating old code to get a sense of what was still
 in use and what wasn&rsquo;t. In order to do this, one of our software architects proposed this solution:
@@ -571,10 +577,7 @@ the piece of code we thought we could remove was in fact not removable.</p>
 <p>In another case, our infrastructure team was prototyping an idea of a &ldquo;code fence&rdquo;, which
 would log / email / sound the alarms whenever a set of files tagged with a certain method was called at runtime (in production). I&rsquo;ll reference this method as <code>code_fence(some_fence_group)</code>. We needed this in order to extract business logics into separate services for SOA services</p>
 
-<p>And here&rsquo;s what drives me crazy about the two solutions I outlined above &mdash; neither of those
-slow iterating approaches would have been necessary in a strongly typed static programming language.
-While they were clever and much easier than adding unit tests to every piece of code we could find after
-years of neglecting writing unit tests, it wouldn&rsquo;t have been such a problem if we had used a compiled language (we may have never even had enough of a product to get to this point if we used a compiled language, but let&rsquo;s leave that discussion for another time).</p>
+<p>And here&rsquo;s what drives me crazy about the two solutions I outlined above &mdash; neither of those slow iterating approaches would have been necessary in a strongly typed static programming language. While they were clever and much easier than adding unit tests to every piece of code we could find after years of neglecting writing unit tests, it wouldn&rsquo;t have been such a problem if we had used a compiled language (we may have never even had enough of a product to get to this point if we used a compiled language, but let&rsquo;s leave that discussion for another time).</p>
 
 <p>Here is how the <code>dead_code</code> situation would have been solved in a strongly typed static programming language:</p>
 
@@ -595,8 +598,9 @@ case:</p>
 3. If it compiles, you're good. If it doesn't, fix the interfaces and GOTO #2.
 </code></pre>
 
-<p>You might be thinking at this point, &ldquo;dude.. unit tests? WTF!?&rdquo;, but I offer you this counter point: Static analysis in a compiled language is tantamount to a proof of correctness in terms of interfaces.Unit tests are not proofs, they do not guarantee your code will work for every possible permutation. You literally get interface checking for free by just using a compiled language &mdash; in a language such as Ruby, to merely get a poor mans version of the same test coverage, you&rsquo;d have to write a unit test for every single new method written to get the level of fine grained error reporting that a compiler would
-give you.</p>
+<p>You might be thinking at this point, &ldquo;dude.. unit tests? WTF!?&rdquo;, but I offer you this counter point: Static analysis in a compiled language is tantamount to a proof of correctness in terms of interfaces.Unit tests are not proofs, they do not guarantee your code will work for every possible permutation. You literally get interface checking for free by just using a compiled language &mdash; in a language such as Ruby, to merely get a poor mans version of the same test coverage, you&rsquo;d have to write a unit test for every single new method written to get the level of fine grained error reporting that a compiler would give you.</p>
+
+<p>To drive my point home, that 900,000 SLOC Ruby application I mentioned was a Rails 2.3 application, running on a version of Ruby 1.8.7. Rails 2.3 was released in <em>2009</em>. It&rsquo;s still running on Rails 2.3 and Ruby 1.8.7, and it&rsquo;s <em>2014</em>. Ruby is up to version 2.1, and Rails is up to 4.0.2 as of me writing this. To be fair, some of the reasons for this is not purely related to the language, but it certainly would have helped with upgrading libraries and Ruby versions if the language was a compiled one.</p>
 
 <p>I should note that there are a few exceptions to this rule in the land of static typing, most notably
 pointers in C / C++ and other low level languages, and in Scala there is the <a href="http://www.scala-lang.org/api/current/index.html#scala.Dynamic">dynamic</a> feature. The important thing here is that these are exceptions, and typical code in these languages will find errors more often than not.</p>
