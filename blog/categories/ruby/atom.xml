@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2014-01-27T16:30:43-08:00</updated>
+  <updated>2014-01-27T17:09:29-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[Daniel Trinh]]></name>
@@ -18,7 +18,7 @@
     <link href="http://danieltrinh.com/blog/2014/01/26/maintaining-a-large-code-base-part-3/"/>
     <updated>2014-01-26T20:58:00-08:00</updated>
     <id>http://danieltrinh.com/blog/2014/01/26/maintaining-a-large-code-base-part-3</id>
-    <content type="html"><![CDATA[<p><a href="/blog/2013/11/09/maintaining-a-large-code-base-part-2/"><em>Previous Part: Service Oriented Architecture</em></a></p>
+    <content type="html"><![CDATA[<p><a href="/blog/2013/11/09/maintaining-a-large-code-base-part-4/"><em>Previous Part: Service Oriented Architecture</em></a></p>
 
 <p>If you are lucky enough to be able to choose the programming language for a new project,
 this section might provide some insight on how it might impact the future of your code base.</p>
