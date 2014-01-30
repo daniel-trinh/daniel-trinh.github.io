@@ -4,7 +4,7 @@
   <title><![CDATA[Category: java | Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2014-01-29T17:23:06-08:00</updated>
+  <updated>2014-01-29T23:47:51-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[Daniel Trinh]]></name>
@@ -37,13 +37,23 @@ and let you conclude yourself on what kind of language to pursue.</p>
 
 <p>Having said that, personally I prefer languages with static type systems over dynamic ones from a pure maintainability point of view, except perhaps in the case of languages like Java.</p>
 
+<p>Before I get started, let&rsquo;s define a few things.</p>
+
+<blockquote><p>Compiled language &ndash; purely statically typed, type annotations are required,
+or must be able to be inferred at compile time
+(Scala, Java, Haskell, C++)</p>
+
+<p>Dynamic language &ndash; interpreted, no type annotations or they are optional
+(Clojure, Typed Clojure, Ruby, Groovy, Python, JavaScript)</p>
+
+<p>Statically typed language &ndash; same as compiled language</p></blockquote>
+
 <h3>Conciseness</h3>
 
 <p>By conciseness I mean this: How much code is necessary to express a particular
 piece of business logic? How much of that code is intrinsic to
 describing that logic, and how much of it is necessary because of limitations
-in the language? It doesn&rsquo;t really matter if code takes fewer lines of code
-if it&rsquo;s impossible to figure out what it does.</p>
+in the language?</p>
 
 <p>Here&rsquo;s an example comparing a basic class in Java with the same functionality (both in behavior and runtime performance) implemented in Scala that demonstrates what I mean:</p>
 
@@ -94,7 +104,7 @@ code necessary for specifying type information, although this isn&rsquo;t always
 
 <h3>Language Complexity</h3>
 
-<p>Unlike conciseness, language complexity isn&rsquo;t quite as clear cut to define. So
+<p>It doesn&rsquo;t really matter if code takes fewer lines of code if it&rsquo;s impossible to figure out what it does. Unlike conciseness, language complexity isn&rsquo;t quite as clear cut to define. So
 instead of trying to define it in an abstract sense, I&rsquo;ll just give you some examples.</p>
 
 <p>Scala is quite conciseness, but the type system is anything but simple.
@@ -105,26 +115,28 @@ language to possibly become the next Scala is <a href="http://www.infoq.com/pres
 
 <p>Here&rsquo;s one of the crazier function signatures in Scala, from the Scalaz library:</p>
 
-<pre><code>implicit def CokleisliMAB[M, A, B](k: Cokleisli[M[_][_], A, B]): MAB[Cokleisli[M[_][_], A, B][A, B], A, B] 
-</code></pre>
+<p><code>scala
+implicit def CokleisliMAB[M, A, B](k: Cokleisli[M[_][_], A, B]): MAB[Cokleisli[M[_][_], A, B][A, B], A, B]
+</code></p>
 
 <p>It probably doesn&rsquo;t seem fair to show that signature for those unfamiliar with Scala, but I assure
 you, that kind of function signature is still daunting for seasoned Scala developers.</p>
 
 <p>Although without those complicated type features, code like this might not be possible in Scala:</p>
 
-<pre><code>// Just Ints
-List(1, 2, 3, 4, 5) map { x =&gt; x * x } sum 
-// =&gt; Int = 55
+<p>```scala
+// Just Ints
+List(1, 2, 3, 4, 5) map { x => x * x } sum
+// => Int = 55</p>
 
-// Ints and Doubles
-Array(1, 2 ,3.0, 4.5, 5.55) map { x =&gt; x * x } sum
-// =&gt; Double = 65.0525 
+<p>// Ints and Doubles
+Array(1, 2 ,3.0, 4.5, 5.55) map { x => x * x } sum
+// => Double = 65.0525</p>
 
-// Just Strings
-Vector("a", "b", "c", "d", "e") map { x =&gt; x * 2 }
-// =&gt;  Vector[String] = Vector(aa, bb, cc, dd, ee)
-</code></pre>
+<p>// Just Strings
+Vector(&ldquo;a&rdquo;, &ldquo;b&rdquo;, &ldquo;c&rdquo;, &ldquo;d&rdquo;, &ldquo;e&rdquo;) map { x => x * 2 }
+// =>  Vector[String] = Vector(aa, bb, cc, dd, ee)
+```</p>
 
 <p>The implementation of the <code>map</code> function in Scala is far from simple, though. Writing
 this sort of code is not something the average Scala developer can accomplish. In fact,
@@ -163,7 +175,8 @@ Code for converting: https://gist.github.com/daniel-trinh/2b6d4b9c38e713148db4
 </code></pre>
 
 <p>While that is a bit of a contrived example, it&rsquo;s a taste of what programmers have to deal with
-in programming languages that have flexible syntax.</p>
+in programming languages that have flexible syntax. Out of the times I&rsquo;ve talked about the new languages I&rsquo;ve been exploring (Clojure, Go, Scala), syntax is almost always the first thing my coworkers notice
+and talk about &mdash; this is because understanding syntax is the first step to being able to read the language. If it&rsquo;s different from what they&rsquo;re familiar with, it&rsquo;s just another barrier to learning it.</p>
 
 <p>Languages that are designed for building domain-specific languages tend to have more
 syntactic flexibility and lexical complexity. Languages like Ruby and Scala were designed
@@ -322,12 +335,12 @@ curly braces for scopes as well was semicolons for terminating sequences.</p>
 <p>The bottom line is that programmers don&rsquo;t want to learn a million different ways of reading
 the same code. If you&rsquo;re using a language with an auto formatter such as <a href="https://www.github.com/mdr/scalariform">Scala</a> or <a href="http://golang.org/cmd/gofmt/">Golang</a>, you&rsquo;re probably in the best boat &mdash; these formatters will format your code for you, enforcing a consistent style without having to spend time and energy trying to manually modify your code to be more readable (no more time wasted on syntax during code reviews). Ruby doesn&rsquo;t have a full fledged auto formatter, but it does have <a href="https://github.com/bbatsov/rubocop">Rubocop</a> for telling you when your code is breaking style conventions.</p>
 
-<h3>Static Analysis, or Why I Love Compiled Languages</h3>
+<h3>Static Analysis</h3>
 
 <p>If there&rsquo;s anything that kills the maintainability of dynamic languages, it&rsquo;s the
 lack of type safety. I&rsquo;ve used Ruby to death, and while I love using it for small applications
 or building prototypes, it&rsquo;s not something I would choose if I had to work on a project
-with more than a few engineers (or one that demanded performance, but that&rsquo;s another story).</p>
+with more than a few engineers or one that was more than a few thousand lines of code (or one that demanded performance, but that&rsquo;s another story).</p>
 
 <p>While I was working at RightScale, we had a massive 900,000 SLOC repository that contained way more
 business logic than it should have. The code base was a nightmare to maintain, and it had been that way for years. This was partially from the lack of time given to fix the problem, partially from having fifty engineers modifying the same code base, but also partly due to the nature of Ruby itself.</p>
@@ -365,7 +378,7 @@ case:</p>
 3. If it compiles, you're good. If it doesn't, fix the interfaces and GOTO #2.
 </code></pre>
 
-<p>You might be thinking at this point, &ldquo;dude.. unit tests? WTF!?&rdquo;, but I offer you this counter point: Static analysis in a compiled language is tantamount to a proof of correctness in terms of interfaces.Unit tests are not proofs, they do not guarantee your code will work for every possible permutation. You literally get interface checking for free by just using a compiled language &mdash; in a language such as Ruby, to merely get a poor mans version of the same test coverage, you&rsquo;d have to write a unit test for every single new method written to get the level of fine grained error reporting that a compiler would give you.</p>
+<p>You might be thinking at this point, &ldquo;dude.. unit tests? WTF!?&rdquo;, but I offer you this counter point: static analysis in a compiled language is tantamount to a proof of correctness in terms of interfaces.Unit tests are not proofs, they do not guarantee your code will work for every possible permutation. You literally get interface checking for free by just using a compiled language &mdash; in a language such as Ruby, to merely get a poor mans version of the same test coverage, you&rsquo;d have to write a unit test for every single new method written to get the level of fine grained error reporting that a compiler would give you.</p>
 
 <p>To drive my point home, that 900,000 SLOC Ruby application I mentioned was a Rails 2.3 application, running on a version of Ruby 1.8.7. Rails 2.3 was released in <em>2009</em>. It&rsquo;s still running on Rails 2.3 and Ruby 1.8.7, and it&rsquo;s <em>2014</em>. Ruby is up to version 2.1, and Rails is up to 4.0.2 as of me writing this. To be fair, some of the reasons for this is not purely related to the language, but it certainly would have helped with upgrading libraries and Ruby versions if the language was a compiled one.</p>
 
@@ -376,9 +389,11 @@ pointers in C / C++ and other low level languages, and in Scala there is the <a 
 
 <p>Slow compile times and slow unit tests slow down code iteration. Dynamic languages
 don&rsquo;t have a compile step, but they are not immune to this issue as they do not
-have a static type checker as I mentioned in the previous section&mdash; unit tests are vital to fill in this gap. I&rsquo;ve worked on a Ruby code base that took 5 minutes to run a single unit test, and it was impossible to iterate quickly. Small bugs such as interface errors between <a href="http://www.ruby-doc.org/core-2.1.0/Symbol.html">strings and symbols</a> became more troublesome to debug than they should have been. If it was up to me, fixing the time to run unit tests would have been more important than anything else, barring production errors.</p>
+have a compile time static type checker, lexer, or parser to find these bugs. Unit tests are vital to fill in this gap&hellip; and they can be slow.</p>
 
-<p>Conversely, on the other side of the language typing fence, I&rsquo;ve heard of 45 minute C++ build times &mdash; I can&rsquo;t possibly imagine trying to modify a code base that takes that long to compile.</p>
+<p>That 900,000 line Ruby application I mentioned earlier took <em>five</em> minutes to run a single unit test, mostly due to having to load and initialize way too many gems and libraries. Needless to say, it was impossible to iterate quickly. Small bugs such as interface errors between <a href="http://www.ruby-doc.org/core-2.1.0/Symbol.html">strings and symbols</a> became more troublesome to debug than they should have been &mdash; for every mismatched <code>def .. end</code>, typo, type mismatch, or invalid argument bug I had in my code, it added five minutes to the development time of what I was working on. Unlike with static typing, dynamic languages will typically only find one of these bugs at a time due to their interpreted &ldquo;run one line at a time&rdquo; nature. If it was up to me, fixing the time to run unit tests would have been more important than anything else (except for production bugs that needed fixing).</p>
+
+<p>Conversely, on the other side of the language typing fence, I&rsquo;ve heard of 45 minute C++ build times &mdash; I can&rsquo;t possibly imagine trying to modify a code base that takes that long to compile. Luckily, I don&rsquo;t think it gets worse than C++, and most statically typed languages have much better compilation times than C++.</p>
 
 <p>Languages like Java, Scala or Golang don&rsquo;t quite have the compile time problem to the extent C++ does.
 They all have incremental compilers, which will only recompile code that has been changed
@@ -389,10 +404,28 @@ anything that requires restarting the JVM is going to add several seconds to the
 
 <p>If you haven&rsquo;t seen it, <a href="http://vimeo.com/36579366">Bret Victor&rsquo;s talk</a> makes the case for immediate feedback in much greater detail than I can in this article. Let&rsquo;s just say if it took a musician 5 minutes to hear a note once it&rsquo;s been played, there would be much fewer musicians in the world.</p>
 
+<h3>Conclusion and Next Up</h3>
+
+<p>It used to be the case that it was common knowledge that statically typed languages were much more verbose than dynamically typed languages were. This hasn&rsquo;t always been true &mdash; concise compiled languages such as Haskell and ML have been around for a while now &mdash; but concise, strongly and statically typed languages such as Scala are only now starting to gain traction in the industry.</p>
+
+<p>So now our current options now seem to be these:</p>
+
+<blockquote><p>Simple to learn, concise languages, but terrible for long term large scale
+   application maintainability due to the lack of compile time static analysis
+   (Ruby, Python, JavaScript)</p>
+
+<p>Simple to learn, verbose languages with good long term maintainability
+   (Go)</p>
+
+<p>Difficult to learn, but concise languages with good long term maintainability
+   (Scala, Haskell)</p></blockquote>
+
+<p>It remains to be seen if it&rsquo;s possible for a language to have all three qualities &mdash; simple to learn, concise, and good for long term maintainability.</p>
+
 <p>The next article in this series is still related to programming languages, but it&rsquo;s important enough
 to warrant it&rsquo;s own article.</p>
 
-<p><em>Coming Next: Limiting Shared State, Or Why You Should Learn Functional Programming</em></p>
+<p><em>Coming Next: Limiting Shared Mutable State, Or Why You Should Learn Functional Programming</em></p>
 ]]></content>
   </entry>
   
