@@ -4,7 +4,7 @@
   <title><![CDATA[Category: golang | Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/blog/categories/golang/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2014-01-29T23:47:51-08:00</updated>
+  <updated>2014-01-30T00:12:00-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[Daniel Trinh]]></name>
@@ -44,16 +44,23 @@ or must be able to be inferred at compile time
 (Scala, Java, Haskell, C++)</p>
 
 <p>Dynamic language &ndash; interpreted, no type annotations or they are optional
-(Clojure, Typed Clojure, Ruby, Groovy, Python, JavaScript)</p>
+(Clojure, Typed Clojure, Ruby, Groovy, Groovy 2.0, Python, JavaScript)</p>
 
 <p>Statically typed language &ndash; same as compiled language</p></blockquote>
+
+<p>Typed Clojure and Groovy 2.0 both have optional type annotations for partial compile time
+type checking and performance improvements, but I am grouping them in the dynamic
+language group because they are optional, and they do not provide the same static
+analysis guarantees as pure statically typed languages, and hence are not as helpful in
+terms of maintainability (more on static analysis later).</p>
 
 <h3>Conciseness</h3>
 
 <p>By conciseness I mean this: How much code is necessary to express a particular
 piece of business logic? How much of that code is intrinsic to
 describing that logic, and how much of it is necessary because of limitations
-in the language?</p>
+in the language? Conciseness is important for maintainability because it means there&rsquo;s less
+code to read, and less code to refactor when it&rsquo;s necessary to do so.</p>
 
 <p>Here&rsquo;s an example comparing a basic class in Java with the same functionality (both in behavior and runtime performance) implemented in Scala that demonstrates what I mean:</p>
 
