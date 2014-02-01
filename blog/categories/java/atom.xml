@@ -4,7 +4,7 @@
   <title><![CDATA[Category: java | Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2014-01-30T00:14:03-08:00</updated>
+  <updated>2014-01-31T23:23:30-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[Daniel Trinh]]></name>
@@ -386,7 +386,7 @@ case:</p>
 3. If it compiles, you're good. If it doesn't, fix the interfaces and GOTO #2.
 </code></pre>
 
-<p>You might be thinking at this point, &ldquo;dude.. unit tests? WTF!?&rdquo;, but I offer you this counter point: static analysis in a compiled language is tantamount to a proof of correctness in terms of interfaces.Unit tests are not proofs, they do not guarantee your code will work for every possible permutation. You literally get interface checking for free by just using a compiled language &mdash; in a language such as Ruby, to merely get a poor mans version of the same test coverage, you&rsquo;d have to write a unit test for every single new method written to get the level of fine grained error reporting that a compiler would give you.</p>
+<p>You might be thinking at this point, &ldquo;dude.. unit tests? WTF!?&rdquo;, but I offer you this counter point: static analysis in a compiled language is tantamount to a proof of correctness in terms of interfaces. Unit tests are not proofs, they do not guarantee your code will work for every possible permutation. You literally get interface checking for free by just using a compiled language &mdash; in a language such as Ruby, to merely get a poor mans version of the same test coverage, you&rsquo;d have to write a unit test for every single new method written to get the level of fine grained error reporting that a compiler would give you.</p>
 
 <p>To drive my point home, that 900,000 SLOC Ruby application I mentioned was a Rails 2.3 application, running on a version of Ruby 1.8.7. Rails 2.3 was released in <em>2009</em>. It&rsquo;s still running on Rails 2.3 and Ruby 1.8.7, and it&rsquo;s <em>2014</em>. Ruby is up to version 2.1, and Rails is up to 4.0.2 as of me writing this. To be fair, some of the reasons for this is not purely related to the language, but it certainly would have helped with upgrading libraries and Ruby versions if the language was a compiled one.</p>
 
@@ -422,10 +422,12 @@ anything that requires restarting the JVM is going to add several seconds to the
    application maintainability due to the lack of compile time static analysis
    (Ruby, Python, JavaScript)</p>
 
-<p>Simple to learn, verbose languages with good long term maintainability
-   (Go)</p>
+<p>Simple to learn, verbose languages with okay long term maintainability, but might
+be a pain to refactor because of code duplication
+   (Go, Java 7 and lower)</p>
 
-<p>Difficult to learn, but concise languages with good long term maintainability
+<p>Difficult to learn, but concise languages with good long term maintainability&hellip;
+as long as you can figure out what your code is doing.
    (Scala, Haskell)</p></blockquote>
 
 <p>It remains to be seen if it&rsquo;s possible for a language to have all three qualities &mdash; simple to learn, concise, and good for long term maintainability.</p>
