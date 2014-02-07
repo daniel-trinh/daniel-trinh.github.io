@@ -4,7 +4,7 @@
   <title><![CDATA[Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2014-02-07T00:43:41-08:00</updated>
+  <updated>2014-02-07T00:45:39-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[Daniel Trinh]]></name>
@@ -290,7 +290,7 @@ the <code>directMessage</code> call to send me a message on errors, I won&rsquo;
     <id>http://danieltrinh.com/blog/2014/02/05/improving-scalariform</id>
     <content type="html"><![CDATA[<p>Scalariform is a Scala source code formatter, originally written by <a href="http://github.com/mdr">Matt Russell</a> (big thanks to him for writing it).</p>
 
-<p>Since I use Scala quite often, I&rsquo;m I&rsquo;m currently working on improving</p>
+<p>Since I use Scala quite often, I&rsquo;ve got some pretty strong motivation to work on improving it.</p>
 
 <p>It&rsquo;s much easier to show you what this does than to try to explain it, so that&rsquo;s what I&rsquo;ll do.</p>
 
