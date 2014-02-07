@@ -4,7 +4,7 @@
   <title><![CDATA[Category: project | Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/blog/categories/project/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2014-02-07T10:13:26-08:00</updated>
+  <updated>2014-02-07T10:45:02-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[Daniel Trinh]]></name>
@@ -236,6 +236,8 @@ message reporting is dependent on Twitter&rsquo;s API working. If there&rsquo;s 
 the <code>directMessage</code> call to send me a message on errors, I won&rsquo;t be notified. I could have solved this by setting up a secondary notification system such as email, but errors happen so rarely that it wasn&rsquo;t worth the trouble.</p>
 
 <p>The third and last problem that I&rsquo;ve run into is actually not one I can do much about. The Twitter card feature for Youtube videos sometimes won&rsquo;t work &mdash; a few Tweets just won&rsquo;t embed a Youtube video into the post, even if there&rsquo;s a valid Youtube URL in the message.</p>
+
+<p>Having said that, I&rsquo;m pretty happy with the results &mdash; it&rsquo;s been working without a hitch for the last year since it&rsquo;s been deployed.</p>
 ]]></content>
   </entry>
   
@@ -282,7 +284,7 @@ else
 }
 ```</p>
 
-<p>Unfortunately, there haven&rsquo;t been very many updates to this super awesome project lately,
+<p>Unfortunately, there haven&rsquo;t been very many updates to the official version of this super awesome project lately,
 so I decided to fork the project and start improving upon it myself. Since I use Scala quite often, I&rsquo;ve got some pretty strong motivation to work on improving it.</p>
 
 <p>Here&rsquo;s a quick summary of what I&rsquo;ve added to Scalariform <em>so far</em>:</p>
@@ -295,6 +297,15 @@ def showInput<a href="parent:%20Component%20=%20null,%0A%20%20message:%20Any,%0A
   initial: A
 ): Option[A]</p>
 
+<p>case class Cake(
+  icingFlavor: Flavor = Vanilla,
+  cakeFlavor: Flavor = Chocolate,</p>
+
+<p>  candles: Int = 1,
+  layers: Int = 3,
+  iceCream: Boolean = False
+)</p>
+
 <p>o.manyArguments(abc = 0,
   abcOne = 1,
   abcTwo,
@@ -304,7 +315,9 @@ def showInput<a href="parent:%20Component%20=%20null,%0A%20%20message:%20Any,%0A
 )
 ```</p>
 
-<p>```scala Scalariform Formatting with My Changes
+<p>```scala Scalariform Formatting with My Changes</p>
+
+<p>// Parameter names, types, and defaults are aligned into three separate columns
 def showInput<a href="parent:%20%20%20%20%20%20Component%20%20%20%20%20=%20null,%0A%20%20message:%20%20%20%20%20Any,%0A%20%20title:%20%20%20%20%20%20%20String%20%20%20%20%20%20%20%20=%20uiString(" title="OptionPane.inputDialogTitle">A</a>,
   messageType: Message.Value = Message.Question,
   icon:        Icon          = EmptyIcon,
@@ -312,7 +325,18 @@ def showInput<a href="parent:%20%20%20%20%20%20Component%20%20%20%20%20=%20null,
   initial:     A
 ): Option[A]</p>
 
-<p>o.manyArguments(
+<p>// Two newlines will result in separate alignment groups
+case class Cake(
+  icingFlavor: Flavor = Vanilla,
+  cakeFlavor:  Flavor = Chocolate,</p>
+
+<p>  candles:  Int     = 1,
+  layers:   Int     = 3,
+  iceCream: Boolean = False
+)</p>
+
+<p>// Same feature working with method calls
+o.manyArguments(
   abc    = 0,
   abcOne = 1,
   abcTwo,
@@ -322,9 +346,7 @@ def showInput<a href="parent:%20%20%20%20%20%20Component%20%20%20%20%20=%20null,
 )
 ```</p>
 
-<p>It&rsquo;s not only limited to methods either &mdash; this will also work with class constructors.</p>
-
-<p>And here&rsquo;s how to use it:</p>
+<p>And here&rsquo;s how to use my version:</p>
 
 <p>```
 // Add this to &hellip;/project/plugins.sbt

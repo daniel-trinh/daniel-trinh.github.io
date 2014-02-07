@@ -416,6 +416,8 @@ the <code>directMessage</code> call to send me a message on errors, I won&rsquo;
 
 <p>The third and last problem that I&rsquo;ve run into is actually not one I can do much about. The Twitter card feature for Youtube videos sometimes won&rsquo;t work &mdash; a few Tweets just won&rsquo;t embed a Youtube video into the post, even if there&rsquo;s a valid Youtube URL in the message.</p>
 
+<p>Having said that, I&rsquo;m pretty happy with the results &mdash; it&rsquo;s been working without a hitch for the last year since it&rsquo;s been deployed.</p>
+
 		
 		
 	</div>
@@ -506,7 +508,7 @@ the <code>directMessage</code> call to send me a message on errors, I won&rsquo;
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Unfortunately, there haven&rsquo;t been very many updates to this super awesome project lately,
+<p>Unfortunately, there haven&rsquo;t been very many updates to the official version of this super awesome project lately,
 so I decided to fork the project and start improving upon it myself. Since I use Scala quite often, I&rsquo;ve got some pretty strong motivation to work on improving it.</p>
 
 <p>Here&rsquo;s a quick summary of what I&rsquo;ve added to Scalariform <em>so far</em>:</p>
@@ -528,6 +530,15 @@ so I decided to fork the project and start improving upon it myself. Since I use
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
 </pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">def</span> <span class="n">showInput</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span>
 </span><span class='line'>  <span class="n">parent</span><span class="k">:</span> <span class="kt">Component</span> <span class="o">=</span> <span class="kc">null</span><span class="o">,</span>
 </span><span class='line'>  <span class="n">message</span><span class="k">:</span> <span class="kt">Any</span><span class="o">,</span>
@@ -537,6 +548,15 @@ so I decided to fork the project and start improving upon it myself. Since I use
 </span><span class='line'>  <span class="n">entries</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Nil</span><span class="o">,</span>
 </span><span class='line'>  <span class="n">initial</span><span class="k">:</span> <span class="kt">A</span>
 </span><span class='line'><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">Cake</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">icingFlavor</span><span class="k">:</span> <span class="kt">Flavor</span> <span class="o">=</span> <span class="nc">Vanilla</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">cakeFlavor</span><span class="k">:</span> <span class="kt">Flavor</span> <span class="o">=</span> <span class="nc">Chocolate</span><span class="o">,</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">candles</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">layers</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">iceCream</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="nc">False</span>
+</span><span class='line'><span class="o">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">o</span><span class="o">.</span><span class="n">manyArguments</span><span class="o">(</span><span class="n">abc</span> <span class="k">=</span> <span class="mi">0</span><span class="o">,</span>
 </span><span class='line'>  <span class="n">abcOne</span> <span class="k">=</span> <span class="mi">1</span><span class="o">,</span>
@@ -569,7 +589,19 @@ so I decided to fork the project and start improving upon it myself. Since I use
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">def</span> <span class="n">showInput</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">// Parameter names, types, and defaults are aligned into three separate columns</span>
+</span><span class='line'><span class="k">def</span> <span class="n">showInput</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span>
 </span><span class='line'>  <span class="n">parent</span><span class="k">:</span>      <span class="kt">Component</span>     <span class="o">=</span> <span class="kc">null</span><span class="o">,</span>
 </span><span class='line'>  <span class="n">message</span><span class="k">:</span>     <span class="kt">Any</span><span class="o">,</span>
 </span><span class='line'>  <span class="n">title</span><span class="k">:</span>       <span class="kt">String</span>        <span class="o">=</span> <span class="n">uiString</span><span class="o">(</span><span class="s">&quot;OptionPane.inputDialogTitle&quot;</span><span class="o">),</span>
@@ -579,7 +611,17 @@ so I decided to fork the project and start improving upon it myself. Since I use
 </span><span class='line'>  <span class="n">initial</span><span class="k">:</span>     <span class="kt">A</span>
 </span><span class='line'><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
 </span><span class='line'>
+</span><span class='line'><span class="c1">// Two newlines will result in separate alignment groups </span>
+</span><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">Cake</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">icingFlavor</span><span class="k">:</span> <span class="kt">Flavor</span> <span class="o">=</span> <span class="nc">Vanilla</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">cakeFlavor</span><span class="k">:</span>  <span class="kt">Flavor</span> <span class="o">=</span> <span class="nc">Chocolate</span><span class="o">,</span>
 </span><span class='line'>
+</span><span class='line'>  <span class="n">candles</span><span class="k">:</span>  <span class="kt">Int</span>     <span class="o">=</span> <span class="mi">1</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">layers</span><span class="k">:</span>   <span class="kt">Int</span>     <span class="o">=</span> <span class="mi">3</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">iceCream</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="nc">False</span>
+</span><span class='line'><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Same feature working with method calls</span>
 </span><span class='line'><span class="n">o</span><span class="o">.</span><span class="n">manyArguments</span><span class="o">(</span>
 </span><span class='line'>  <span class="n">abc</span>    <span class="k">=</span> <span class="mi">0</span><span class="o">,</span>
 </span><span class='line'>  <span class="n">abcOne</span> <span class="k">=</span> <span class="mi">1</span><span class="o">,</span>
@@ -591,9 +633,7 @@ so I decided to fork the project and start improving upon it myself. Since I use
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>It&rsquo;s not only limited to methods either &mdash; this will also work with class constructors.</p>
-
-<p>And here&rsquo;s how to use it:</p>
+<p>And here&rsquo;s how to use my version:</p>
 
 <figure class='code'><figcaption><span>Scalariform Formatting with My Changes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
