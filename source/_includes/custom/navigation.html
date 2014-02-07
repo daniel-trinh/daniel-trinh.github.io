@@ -1,4 +1,23 @@
+<hgroup>
+  <h2>Articles</h2>
+  {% if site.subtitle %}
+    <h2>{{ site.subtitle }}</h2>
+  {% endif %}
+</hgroup>
 <ul class="main-navigation">
   <li><a href="{{ root_url }}/blog/categories">Categories</a></li>
   <li><a href="{{ root_url }}/blog/archives">Archives</a></li>
+</ul>
+
+<hgroup>
+  <h2 class="main-navigation">
+    <a href="/blog/categories/project/">Open Source Projects</a>
+  </h2>
+</hgroup>
+<ul>
+  <li>
+    <a href="{{ root_url }}/blog/2014/02/06/converting-ocremixs-rss-to-a-twitter-feed/">OCRemix RSS to Twitter</a></li>
+  <li>
+    <a href="{{ root_url }}/blog/2014/02/05/improving-scalariform/">Scalariform</a>
+  </li>
 </ul>

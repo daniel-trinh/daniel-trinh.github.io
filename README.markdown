@@ -17,4 +17,3 @@ Add "articles" section
 rake generate
 rake deploy
 (Enter username/password)
-

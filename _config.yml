@@ -1,3 +1,4 @@
+
 # ----------------------- #
 #      Main Configs       #
 # ----------------------- #
@@ -32,7 +33,7 @@ permalink: /blog/:year/:month/:day/:title/
 source: source
 destination: public
 plugins: plugins
-code_dir: downloads/code
+code_dir: downloads
 category_dir: blog/categories
 markdown: rdiscount
 rdiscount:
@@ -98,6 +99,9 @@ disqus_show_comment_count: false
 
 # Google Analytics
 google_analytics_tracking_id: UA-45587019-1
+
+# Enable/disable sharing at the bottom of each article:
+share: false
 
 # Facebook Like
 facebook_user: media/set/?set=a.10201598454231151.1073741826.1472056878&type=1&l=2a00e2ff84
