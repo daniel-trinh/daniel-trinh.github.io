@@ -389,7 +389,7 @@ parsing out new songs to post on Twitter.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In order to figure out whether or not a song is new, I poll the @newOCRemixes Twitter Timeline, check the last Tweet&rsquo;s <code>songId</code>, and make sure any new song I post happens
+<p>In order to figure out whether or not a song is new, I send a request to Twitter&rsquo;s API to retrieve the <code>@newOCRemixes</code> Twitter Timeline, check the last Tweet&rsquo;s <code>songId</code>, and make sure any new song I post happens
 to have a songId greater than the one on the timeline.</p>
 
 <h4>Things to Improve</h4>

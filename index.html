@@ -394,7 +394,7 @@ parsing out new songs to post on Twitter.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In order to figure out whether or not a song is new, I poll the @newOCRemixes Twitter Timeline, check the last Tweet&rsquo;s <code>songId</code>, and make sure any new song I post happens
+<p>In order to figure out whether or not a song is new, I send a request to Twitter&rsquo;s API to retrieve the <code>@newOCRemixes</code> Twitter Timeline, check the last Tweet&rsquo;s <code>songId</code>, and make sure any new song I post happens
 to have a songId greater than the one on the timeline.</p>
 
 <h4>Things to Improve</h4>
@@ -449,8 +449,6 @@ the <code>directMessage</code> call to send me a message on errors, I won&rsquo;
 	<h1 class="title" itemprop="name"><a href="/blog/2014/02/05/improving-scalariform/" itemprop="url">Improving Scalariform, the Scala Source Formatter</a></h1>
 	<div class="entry-content" itemprop="articleBody">
 		<p>Scalariform is a Scala source code formatter, originally written by <a href="http://github.com/mdr">Matt Russell</a> (big thanks to him for writing it).</p>
-
-<p>Since I use Scala quite often, I&rsquo;ve got some pretty strong motivation to work on improving it.</p>
 
 <p>It&rsquo;s much easier to show you what this does than to try to explain it, so that&rsquo;s what I&rsquo;ll do.</p>
 
@@ -509,7 +507,7 @@ the <code>directMessage</code> call to send me a message on errors, I won&rsquo;
 
 
 <p>Unfortunately, there haven&rsquo;t been very many updates to this super awesome project lately,
-so I decided to fork the project and start improving upon it myself.</p>
+so I decided to fork the project and start improving upon it myself. Since I use Scala quite often, I&rsquo;ve got some pretty strong motivation to work on improving it.</p>
 
 <p>Here&rsquo;s a quick summary of what I&rsquo;ve added to Scalariform <em>so far</em>:</p>
 
@@ -608,7 +606,8 @@ so I decided to fork the project and start improving upon it myself.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The source code can be found on my <a href="https://github.com/daniel-trinh/scalariform">Github</a>.</p>
+<p>See the <a href="https://github.com/daniel-trinh/sbt-scalariform">plugin</a> for how to configure formatting options, and the <a href="https://github.com/daniel-trinh/scalariform">Scalariform readme</a>
+for available formatting options.</p>
 
 <p>Since this is an ongoing project, there will be more updates to come.</p>
 
