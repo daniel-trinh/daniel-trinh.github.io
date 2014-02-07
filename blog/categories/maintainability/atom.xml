@@ -4,7 +4,7 @@
   <title><![CDATA[Category: maintainability | Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/blog/categories/maintainability/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2014-01-31T23:23:30-08:00</updated>
+  <updated>2014-02-07T00:43:41-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[Daniel Trinh]]></name>
@@ -23,7 +23,7 @@
 <p>If you are lucky enough to be able to choose the programming language for a new project,
 this section might provide some insight on how it might impact the future of your code base.</p>
 
-<h2>Choose your programming languages wisely</h2>
+<h2>Choose Your Programming Languages Wisely</h2>
 
 <p>This article focuses only on the technical details of programming languages and their
 effects on maintainability. It won&rsquo;t be covering topics such as a language&rsquo;s popularity, tooling,
@@ -510,7 +510,7 @@ have done. Open source means more contributors (if it&rsquo;s good enough for ot
 more dogfooding. Or, if it&rsquo;s <em>really</em> good, you could sell the service, like Amazon has done
 with AWS.</p>
 
-<h3>Some Basic Service to Service Examples</h3>
+<h2>Some Basic Service to Service Examples</h2>
 
 <p>An example of SOA that&rsquo;s perhaps more well known is the movement of
 generating GUIs from the server to the client, and having the server side code serve pure data
@@ -525,7 +525,7 @@ Now if users don&rsquo;t like your GUI, they can build their own.</p>
 <p>So what if you aren&rsquo;t building servers or applications that have to talk over the network? The same principle of splitting things into separate code bases and communicating through a common
 protocol can be applied to smaller scale programs as well.</p>
 
-<h3>The future of IDEs</h3>
+<h2>The Future of IDEs</h2>
 
 <p>Ever used an IDE such as Eclipse, Intellij Idea, or Visual Studio? If you&rsquo;ve ever thought to yourself,
 <em>&ldquo;man, I really like the IDE auto completion, incremental compilation, and refactoring tools,
@@ -593,12 +593,12 @@ I&rsquo;ve learned many lessons in having to work with a code base of that size,
 this to help software engineers, including myself, to think about code maintainability to the same degree they might
 think about code correctness or performance, if not higher.</p>
 
-<h2>Basics</h2>
+<h2>The Basics</h2>
 
 <p>Let&rsquo;s get the obvious software practices that happen to help code maintainability
 out of the way first. These should be familiar with anyone who&rsquo;s been coding for a while.</p>
 
-<h3>Don&rsquo;t Repeat Yourself</h3>
+<h4>Don&rsquo;t Repeat Yourself</h4>
 
 <p>What do you do when you&rsquo;ve got a function duplicated 100 times over 100 different
 files, and you want to modify the behavior of that common code? Refactor the common code into one function somewhere,
@@ -616,7 +616,7 @@ it causes maintenance headaches later on.</p>
 <p>Sometimes this isn&rsquo;t always a good thing, especially if the code refactoring involves
 metaprogramming or other language features that tend to make code less readable.</p>
 
-<h3>Eat Your Own Dog Food (Dogfooding)</h3>
+<h4>Eat Your Own Dog Food (Dogfooding)</h4>
 
 <p>If nobody has ever used your application before shipping it to customers, how can
 you be sure it&rsquo;s any good?</p>
@@ -635,7 +635,7 @@ products that are already good (icecream) don&rsquo;t need to be improved.</p>
 <p>Dogfooding doesn&rsquo;t have to be limited to using something at the scale of products, though.
 Testing could be considered a form of dogfooding&hellip;</p>
 
-<h3>Write Unit Tests</h3>
+<h4>Write Unit Tests</h4>
 
 <p>How can you refactor and change code reliably if there are no checks in place to
 make sure the application is working as expected after the change?</p>
@@ -652,14 +652,14 @@ integration tests, and then it&rsquo;s your manual testers, then customers. Each
 along the way is typically slower than the previous, with
 <a href="http://blogs.msdn.com/cfs-filesystemfile.ashx/__key/communityserver-blogs-components-weblogfiles/00-00-01-32-02-metablogapi/7317.image_5F00_0F65063B.png%20just%20ship%20it">having customers do your testing</a> generally much slower than running a unit test.</p>
 
-<h3>Document Your Code</h3>
+<h4>Document Your Code</h4>
 
 <p>Sometimes it&rsquo;s a lot easier to explain in words what your code does than
 it is to try to read the code itself, especially if your programming language is not
 particularly concise (more on this in part 3). A few comments here and there
 can greatly increase the understandability of your code.</p>
 
-<h3>Do Code Reviews and Design Reviews</h3>
+<h4>Do Code Reviews and Design Reviews</h4>
 
 <p>So how do you go about figuring out what code needs to be better documented?</p>
 

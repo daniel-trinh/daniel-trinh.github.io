@@ -9,7 +9,7 @@
 	<meta name="author" content="Daniel Trinh">
 
 	
-	<meta name="description" content="Jan 26th, 2014 essay, golang, java, maintainability, ruby, scala Maintaining a Large Code Base, Part 3: Programming Languages Previous Part: Service &hellip;">
+	<meta name="description" content="Feb 6th, 2014 project, scala Converting the OverClocked Remix RSS to a Twitter Feed OverClocked Remix (OCRemix) is a website dedicated to serving &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -60,12 +60,27 @@
   <h1><a href="/">Daniel Trinh</a></h1>
   
 </hgroup>
-
-<nav id="main-nav"><ul class="main-navigation">
+<nav id="main-nav"><hgroup>
+  <h2>Articles</h2>
+  
+</hgroup>
+<ul class="main-navigation">
   <li><a href="/blog/categories">Categories</a></li>
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
 
+<hgroup>
+  <h2 class="main-navigation">
+    <a href="/blog/categories/project/">Open Source Projects</a>
+  </h2>
+</hgroup>
+<ul>
+  <li>
+    <a href="/blog/2014/02/06/converting-ocremixs-rss-to-a-twitter-feed/">OCRemix RSS to Twitter</a></li>
+  <li>
+    <a href="/blog/2014/02/05/improving-scalariform/">Scalariform</a>
+  </li>
+</ul>
 
 <section class="aboutme">
   <p>
@@ -126,11 +141,633 @@
   
 
 
+<time datetime="2014-02-06T00:00:00-08:00" data-updated="true" itemprop="datePublished">Feb 6<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/project/'>project</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
+
+</div>
+		
+	</div>
+
+	<h1 class="title" itemprop="name"><a href="/blog/2014/02/06/converting-ocremixs-rss-to-a-twitter-feed/" itemprop="url">Converting the OverClocked Remix RSS to a Twitter Feed</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p><a href="http://ocremix.org">OverClocked Remix (OCRemix)</a> is a website dedicated to serving high quality remixes of music from video games. The RSS feed is occasionally updated with the latest ten new songs that are posted on the site.</p>
+
+<p>This project posts new songs from its RSS feed to a Twitter feed. The results can be seen at <a href="https://twitter.com/newOCRemixes">@newOCRemixes</a> on Twitter.</p>
+
+<p>The rest of this post goes into the design and development of this project.</p>
+
+<h2>Motivation and design</h2>
+
+<p>I&rsquo;ve been listening to music off of OCRemix ever since 2002. The way I used
+to find new songs was to repeatedly visit their website, look for new songs,
+and then click through three or four links for every new song that was posted.</p>
+
+<p>I got tired of checking the website, only to end up finding out there were no new songs,
+or finding out there are ten new songs, and having to click 30 times to hear all of them.</p>
+
+<p>So I set out to figure out how to make it much, much easier to hear new songs and download
+them if I liked them.</p>
+
+<h4>Existing OCRemix Feeds</h4>
+
+<p>OCRemix has it&rsquo;s <a href="https://twitter.com/ocremix">own Twitter feed</a>, which they will use
+to post new remixes, but it&rsquo;s not exclusive to providing just new songs:</p>
+
+<p><img class="center" src="/images/ocremix/official_unrelated.png" width="500" height="450" title="Official OCRemix Twitter Feed" alt="Official OCRemix Twitter Feed picture"></p>
+
+<p>Twitter happens to have this nice feature that they call <a href="https://dev.twitter.com/docs/cards">cards</a>. Cards are essentially a feature that detect certain types of URLs, and display information within the tweet that would only be accessible from visiting the URL. One of the
+supported card types are Youtube links, which will embed a Youtube video into a Tweet
+whenever a Youtube link is detected.</p>
+
+<p>Sometimes the links to new songs include a Youtube link to the remix for easy listening&hellip;</p>
+
+<p><img class="center" src="/images/ocremix/official_link.png" width="400" height="450" title="Official OCRemix Twitter Feed -- Embedded Youtube" alt="Official OCRemix Twitter Feed picture, embedded Youtube"></p>
+
+<p>and sometimes they don&rsquo;t:</p>
+
+<p><img class="center" src="/images/ocremix/official_no_link.png" width="400" height="450" title="Official OCRemix Twitter Feed -- no Embedded Youtube" alt="Official OCRemix Twitter Feed picture, no Youtube"></p>
+
+<p>They also have their own <a href="https://www.youtube.com/channel/UC8Wh7qpPGJm3K1eZ6DHjpKA">Youtube channel</a>
+where new songs are posted, but similarly to their Twitter feed, it is not exclusive to new songs.</p>
+
+<h4>My OCRemix Feed</h4>
+
+<p>Since I was already using Twitter as a news feed, I chose that as my target platform for
+receiving new song notifications. The following is a list of some of the things I wanted
+out of my Twitter feed system.</p>
+
+<blockquote><ul>
+<li><p>Only new songs should be posted &mdash; no reposts.</p></li>
+<li><p>Only songs should be posted &mdash; nothing else but new OCRemix songs.</p></li>
+<li><p>Every single song must contain a link to the Youtube song link.</p></li>
+<li><p>Show the video game, remixer, and composer the song is remixed from,
+ if it fits in 140 characters along with the Youtube link.</p></li>
+<li><p>This system should not require any input from me (automated).</p></li>
+<li><p>If something is broken, I should be notified of the breakage.</p></li>
+</ul>
+</blockquote>
+
+<p>Initially, I wanted to implement direct download links within each Tweet in order to simplify the process of downloading the mp3 for new songs. However, because ocremix.org is non-profit and receives advertising money from the main website to pay for bandwidth, I chose to just link to their site to download out of politeness.</p>
+
+<p>This is what the final version of my implementation looks like:</p>
+
+<p><img class="center" src="/images/ocremix/my_version.png" width="500" height="550" title="My Unofficial Twitter Feed" alt="My Unofficial Twitter Feed picture"></p>
+
+<p>Assuming this information fits into the 140 character limit, each one of these song tweets is composed of the following:</p>
+
+<pre><code>songId     - Integer, official remix number (currently at 2827 at the time of writing). 
+title      - Song title, given to the song by the remixers.
+remixers   - The remix artists that created the remix.
+composers  - The original artists that created the original song.
+youtubeUrl - Link to the remix on Youtube.
+writeupUrl - Official OCRemix link with remix information and a download link.
+</code></pre>
+
+<h2>Programming Details</h2>
+
+<p>The actual project was implemented using Scala. The main libraries used were
+Dispatch for OAuth and talking with Twitter&rsquo;s API, and <a href="akka.io">Akka</a> for the periodic
+polling of the RSS feed. It&rsquo;s currently deployed on Heroku, where it has been running 24/7 for the past year. Source code is <a href="http://github.com/daniel-trinh/ocremix">here</a>.</p>
+
+<h4>Fitting Info into a Tweet</h4>
+
+<p>Trying to detect whether or not a Tweet will fit in 140 characters is tricky, especially
+if there are URLs in the Tweet. Twitter will automatically shorten URLs for you &mdash; the caveat
+is that the length of the shortened URL is what counts to the 140 character limit,
+and not the size of the original URL.</p>
+
+<p>So how do you figure out what the shortened URL size will be?
+Twitter happens to have a <a href="https://dev.twitter.com/docs/api/1.1/get/help/configuration">configuration API</a> that will tell you the current length
+of URLs (https links are one character longer than http). Since this number can
+change, it can&rsquo;t be hardcoded into the system. It&rsquo;s also not a number that is likely
+to change often.</p>
+
+<p>To take this varying URL length into consideration, the previously known shortened URL length is cached in memory for quick usage. I poll the configuration API
+every 24 hours to check for and update the URL length cache if necessary.</p>
+
+<p>This polling is done using Akka&rsquo;s scheduler:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">twitterConfigUpdaterSchedule</span> <span class="k">=</span> <span class="nc">MySystem</span><span class="o">().</span><span class="n">scheduler</span><span class="o">.</span><span class="n">schedule</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">initialDelay</span> <span class="k">=</span> <span class="mi">0</span> <span class="n">seconds</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">frequency</span>    <span class="k">=</span> <span class="mi">1</span> <span class="n">day</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">receiver</span>     <span class="k">=</span> <span class="n">configUpdater</span><span class="o">,</span>
+</span><span class='line'>  <span class="c1">// If I was writing this again, I probably wouldn&#39;t use a &quot;doit&quot; message</span>
+</span><span class='line'>  <span class="c1">// for initiating an update.</span>
+</span><span class='line'>  <span class="n">message</span>      <span class="k">=</span> <span class="s">&quot;doit&quot;</span>
+</span><span class='line'><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sometimes there&rsquo;s just too much information to include in 140 characters. Going back
+to my design goal of making it easy to hear new songs, the Youtube link is the
+most important thing to include in the Tweet.</p>
+
+<p>Here&rsquo;s a shortened version of the code that figures out what to put into a tweet:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">// The youtube URL is in every possible one of these.</span>
+</span><span class='line'><span class="k">lazy</span> <span class="k">val</span> <span class="n">v0</span> <span class="k">=</span> <span class="nc">Tweet</span><span class="o">(</span><span class="n">songId</span><span class="o">,</span> <span class="n">title</span><span class="o">,</span> <span class="n">remixers</span><span class="o">,</span> <span class="n">composers</span><span class="o">,</span> <span class="n">youtubeUrl</span><span class="o">,</span> <span class="n">writeupUrl</span><span class="o">)</span>
+</span><span class='line'><span class="k">lazy</span> <span class="k">val</span> <span class="n">v1</span> <span class="k">=</span> <span class="nc">Tweet</span><span class="o">(</span><span class="n">songId</span><span class="o">,</span> <span class="n">title</span><span class="o">,</span> <span class="n">remixers</span><span class="o">,</span> <span class="n">youtubeUrl</span><span class="o">,</span> <span class="n">writeupUrl</span><span class="o">)</span>
+</span><span class='line'><span class="k">lazy</span> <span class="k">val</span> <span class="n">v2</span> <span class="k">=</span> <span class="nc">Tweet</span><span class="o">(</span><span class="n">songId</span><span class="o">,</span> <span class="n">title</span><span class="o">,</span> <span class="n">youtubeUrl</span><span class="o">,</span> <span class="n">writeupUrl</span><span class="o">)</span>
+</span><span class='line'><span class="k">lazy</span> <span class="k">val</span> <span class="n">v3</span> <span class="k">=</span> <span class="nc">Tweet</span><span class="o">(</span><span class="n">songId</span><span class="o">,</span> <span class="n">title</span><span class="o">,</span> <span class="n">youtubeUrl</span><span class="o">)</span>
+</span><span class='line'><span class="k">lazy</span> <span class="k">val</span> <span class="n">v4</span> <span class="k">=</span> <span class="nc">Tweet</span><span class="o">(</span><span class="n">songId</span><span class="o">,</span> <span class="n">youtubeUrl</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Start with the longest possible, then slowly go to the shortest.</span>
+</span><span class='line'><span class="k">if</span> <span class="o">(</span><span class="n">v0</span><span class="o">.</span><span class="n">isTweetable</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">v0</span>
+</span><span class='line'><span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">v1</span><span class="o">.</span><span class="n">isTweetable</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">v1</span>
+</span><span class='line'><span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">v2</span><span class="o">.</span><span class="n">isTweetable</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">v2</span>
+</span><span class='line'><span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">v3</span><span class="o">.</span><span class="n">isTweetable</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">v3</span>
+</span><span class='line'><span class="k">else</span>
+</span><span class='line'>  <span class="n">v4</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Unless Twitter plans on upping the shortened URL length to ~135 characters,
+or the ids start incrementing in several orders of magnitude per new remix,
+the smallest tweet content (<code>songId</code>,<code>youtubeUrl</code>) is good enough.</p>
+
+<p><em>There&rsquo;s a reason songId is included in all of the possibilities as well, more on that later.</em></p>
+
+<h4>Receiving Error Notifications</h4>
+
+<p>In order to make sure I received a notification whenever something breaks, every single
+method that could cause an error returns an <code>Either[_, String]</code>, where
+the <code>Right</code> case stores the successful result, and the <code>Left</code> case stores a string explaining what went wrong. Whenever a method is completed
+with the <code>Left</code> case, a direct message is sent to my own personal Twitter handle,
+with information about the failure.</p>
+
+<p>Here&rsquo;s what error messages look like when they reach my Twitter inbox:</p>
+
+<p><img class="center" src="/images/ocremix/error_messages.png" width="600" height="450" title="All in one place" alt="Error Messages in my Twitter Inbox"></p>
+
+<p>Some examples of methods that might fail that I want to be
+alerted about if they do:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="c1">// Sends a private message to someone on Twitter</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">directMessage</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">TwitterHandle</span><span class="o">,</span> <span class="n">message</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">]]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Tweets a new post</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">statusesUpdate</span><span class="o">(</span><span class="n">tweet</span><span class="k">:</span> <span class="kt">Tweetable</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">]]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Retrieves the last few Tweets from a user&#39;s timeline</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">userTimeline</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">userId</span><span class="k">:</span>     <span class="kt">String</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">screenName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">count</span><span class="k">:</span>      <span class="kt">Int</span>
+</span><span class='line'>  <span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">]]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Retrieves configuration information about Twitter</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">helpConfiguration</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Either</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">TwitterConfiguration</span><span class="o">]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(In retrospect, just using Future[String] would have been enough, since it
+stores the exception information in case of failure&hellip; but keep in mind I <em>did</em> write this code as a novice just as I started learning Scala).</p>
+
+<h4>Polling and Parsing the RSS Feed</h4>
+
+<p>There&rsquo;s nothing particularly fancy about this part &mdash; it mostly consists of
+periodically polling <a href="http://ocremix.org/feeds/ten20/">OCRemix&rsquo;s RSS</a> and
+parsing out new songs to post on Twitter.</p>
+
+<p>Here&rsquo;s the code that schedules an RSS polling check every half hour:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">rssPollerSchedule</span> <span class="k">=</span> <span class="nc">MySystem</span><span class="o">().</span><span class="n">scheduler</span><span class="o">.</span><span class="n">schedule</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">initialDelay</span> <span class="k">=</span> <span class="mi">0</span> <span class="n">seconds</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">frequency</span>    <span class="k">=</span> <span class="mi">30</span> <span class="n">minutes</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">receiver</span>     <span class="k">=</span> <span class="n">rssPoller</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">message</span>      <span class="k">=</span> <span class="s">&quot;doit&quot;</span>
+</span><span class='line'><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In order to figure out whether or not a song is new, I poll the @newOCRemixes Twitter Timeline, check the last Tweet&rsquo;s <code>songId</code>, and make sure any new song I post happens
+to have a songId greater than the one on the timeline.</p>
+
+<h4>Things to Improve</h4>
+
+<p>All of this <em>mostly</em> works. There are a few problems that were more complicated
+to solve than the time I wanted to spend on this.</p>
+
+<p>One of these problems happens to be that the RSS feed
+only stores the 10 latest new songs &mdash; if there&rsquo;s ever more than 10 songs posted
+within a 30 minute interval, any songs prior to the last 10 will not get posted.
+This has only happened once since I&rsquo;ve launched this project, but there&rsquo;s not
+much that can be done about it, short of asking for the OCRemix owners to not post
+so many songs at once, or up the number on their RSS feed.. or polling the website
+itself, and parsing the song URLs from raw HTML.</p>
+
+<p>Another problem (that hasn&rsquo;t actually been much trouble so far) is that the error
+message reporting is dependent on Twitter&rsquo;s API working. If there&rsquo;s a problem with
+the <code>directMessage</code> call to send me a message on errors, I won&rsquo;t be notified. I could have solved this by setting up a secondary notification system such as email, but errors happen so rarely that it wasn&rsquo;t worth the trouble.</p>
+
+<p>The third and last problem that I&rsquo;ve run into is actually not one I can do much about. The Twitter card feature for Youtube videos sometimes won&rsquo;t work &mdash; a few Tweets just won&rsquo;t embed a Youtube video into the post, even if there&rsquo;s a valid Youtube URL in the message.</p>
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-05T23:26:00-08:00" data-updated="true" itemprop="datePublished">Feb 5<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/project/'>project</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
+
+</div>
+		
+	</div>
+
+	<h1 class="title" itemprop="name"><a href="/blog/2014/02/05/improving-scalariform/" itemprop="url">Improving Scalariform, the Scala Source Formatter</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Scalariform is a Scala source code formatter, originally written by <a href="http://github.com/mdr">Matt Russell</a> (big thanks to him for writing it).</p>
+
+<p>Since I use Scala quite often, I&rsquo;m I&rsquo;m currently working on improving</p>
+
+<p>It&rsquo;s much easier to show you what this does than to try to explain it, so that&rsquo;s what I&rsquo;ll do.</p>
+
+<p>This is some poorly formatted code before running Scalariform:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">Coffee</span> <span class="o">{</span>
+</span><span class='line'><span class="k">val</span> <span class="n">sugarCubes</span> <span class="k">=</span> <span class="mi">20</span>
+</span><span class='line'><span class="k">val</span> <span class="n">isCaffeinated</span> <span class="k">=</span> <span class="kc">false</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="n">energyBoost</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'><span class="k">if</span> <span class="o">(</span><span class="n">caffeinated</span><span class="o">)</span>
+</span><span class='line'><span class="mi">100</span> <span class="o">*</span> <span class="n">sugarCubes</span>
+</span><span class='line'><span class="k">else</span>
+</span><span class='line'><span class="mi">0</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After running Scalariform:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">Coffee</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">sugarCubes</span> <span class="k">=</span> <span class="mi">20</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">isCaffeinated</span> <span class="k">=</span> <span class="kc">false</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">energyBoost</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">caffeinated</span><span class="o">)</span>
+</span><span class='line'>      <span class="mi">100</span> <span class="o">*</span> <span class="n">sugarCubes</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="mi">0</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Unfortunately, there haven&rsquo;t been very many updates to this super awesome project lately,
+so I decided to fork the project and start improving upon it myself.</p>
+
+<p>Here&rsquo;s a quick summary of what I&rsquo;ve added to Scalariform <em>so far</em>:</p>
+
+<figure class='code'><figcaption><span>Previous Scalariform Formatting</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">def</span> <span class="n">showInput</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span>
+</span><span class='line'>  <span class="n">parent</span><span class="k">:</span> <span class="kt">Component</span> <span class="o">=</span> <span class="kc">null</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">message</span><span class="k">:</span> <span class="kt">Any</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">title</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">uiString</span><span class="o">(</span><span class="s">&quot;OptionPane.inputDialogTitle&quot;</span><span class="o">),</span>
+</span><span class='line'>  <span class="n">messageType</span><span class="k">:</span> <span class="kt">Message.Value</span> <span class="o">=</span> <span class="nc">Message</span><span class="o">.</span><span class="nc">Question</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">icon</span><span class="k">:</span> <span class="kt">Icon</span> <span class="o">=</span> <span class="nc">EmptyIcon</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">entries</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Nil</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">initial</span><span class="k">:</span> <span class="kt">A</span>
+</span><span class='line'><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">o</span><span class="o">.</span><span class="n">manyArguments</span><span class="o">(</span><span class="n">abc</span> <span class="k">=</span> <span class="mi">0</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">abcOne</span> <span class="k">=</span> <span class="mi">1</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">abcTwo</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">abcThree</span> <span class="k">=</span> <span class="mi">3</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">abcFour</span> <span class="k">=</span> <span class="mi">4</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">abcFive</span> <span class="k">=</span> <span class="mi">3</span>
+</span><span class='line'><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Scalariform Formatting with My Changes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">def</span> <span class="n">showInput</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span>
+</span><span class='line'>  <span class="n">parent</span><span class="k">:</span>      <span class="kt">Component</span>     <span class="o">=</span> <span class="kc">null</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">message</span><span class="k">:</span>     <span class="kt">Any</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">title</span><span class="k">:</span>       <span class="kt">String</span>        <span class="o">=</span> <span class="n">uiString</span><span class="o">(</span><span class="s">&quot;OptionPane.inputDialogTitle&quot;</span><span class="o">),</span>
+</span><span class='line'>  <span class="n">messageType</span><span class="k">:</span> <span class="kt">Message.Value</span> <span class="o">=</span> <span class="nc">Message</span><span class="o">.</span><span class="nc">Question</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">icon</span><span class="k">:</span>        <span class="kt">Icon</span>          <span class="o">=</span> <span class="nc">EmptyIcon</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">entries</span><span class="k">:</span>     <span class="kt">Seq</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>        <span class="k">=</span> <span class="nc">Nil</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">initial</span><span class="k">:</span>     <span class="kt">A</span>
+</span><span class='line'><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">o</span><span class="o">.</span><span class="n">manyArguments</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">abc</span>    <span class="k">=</span> <span class="mi">0</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">abcOne</span> <span class="k">=</span> <span class="mi">1</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">abcTwo</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">abcThree</span> <span class="k">=</span> <span class="mi">3</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">abcFour</span>  <span class="k">=</span> <span class="mi">4</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">abcFive</span>  <span class="k">=</span> <span class="mi">3</span>
+</span><span class='line'><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;s not only limited to methods either &mdash; this will also work with class constructors.</p>
+
+<p>And here&rsquo;s how to use it:</p>
+
+<figure class='code'><figcaption><span>Scalariform Formatting with My Changes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">// Add this to .../project/plugins.sbt</span>
+</span><span class='line'><span class="n">resolvers</span> <span class="o">+=</span> <span class="s">&quot;Sonatype OSS Snapshots&quot;</span> <span class="n">at</span> <span class="s">&quot;https://oss.sonatype.org/content/repositories/snapshots&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">addSbtPlugin</span><span class="o">(</span><span class="s">&quot;com.danieltrinh&quot;</span> <span class="o">%</span> <span class="s">&quot;sbt-scalariform&quot;</span> <span class="o">%</span> <span class="s">&quot;1.3.0-SNAPSHOT&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The source code can be found on my <a href="https://github.com/daniel-trinh/scalariform">Github</a>.</p>
+
+<p>Since this is an ongoing project, there will be more updates to come.</p>
+
+<!-- 
+The rest of this article goes into great detail about my motivation to work on Scalariform,
+the importance of auto-formatters in general, and some of the design dilemmas of working on Scalariform.
+
+Before I get into what I've improved, I'll go over some reasons why Scalariform
+is important.
+
+## The Importance of Auto-Formatting
+[Many](https://code.google.com/p/google-styleguide/ "Google's style guides for various languages") [companies](http://twitter.github.io/effectivescala/ "Twitter's style guide for Scala") [have](https://github.com/styleguide/ruby "Github's style guide for Ruby") coding style guidelines for a reason. [I wrote about this](/blog/2014/01/26/maintaining-a-large-code-base-part-3/) in great detail in my article about programming languages and code bases. My general conclusion is that having many ways of visualizing and formatting source code
+is not a good thing -- the more ways to format the code, the more ways a reader of the
+code will have to learn to read the code to understand it. 
+
+The following code example is perfectly valid scala code... but it's not at all readable.
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">Coffee</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">sugarCubes</span> <span class="k">=</span> <span class="mi">20</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">isCaffeinated</span> <span class="k">=</span> <span class="kc">false</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">energyBoost</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">caffeinated</span><span class="o">)</span>
+</span><span class='line'>      <span class="mi">100</span> <span class="o">*</span> <span class="n">sugarCubes</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="mi">0</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+The output from running Scalariform for this result is the same as the previous example:
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">Coffee</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">sugarCubes</span> <span class="k">=</span> <span class="mi">20</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">isCaffeinated</span> <span class="k">=</span> <span class="kc">false</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">energyBoost</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">caffeinated</span><span class="o">)</span>
+</span><span class='line'>      <span class="mi">100</span> <span class="o">*</span> <span class="n">sugarCubes</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="mi">0</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+Having something that will take care of the formatting for me is great &#8211; spending time thinking about formatting, manually formatting code, and spending time
+on code reviews about formatting is not a very productive use of time when there are actual business product related problems to solve, and especially since it&#8217;s a problem that can be solved forever by using an auto-formatter along the lines of Scalariform or gofmt.
+
+#### Formatting Ubiquity
+
+Having an auto formatter to enforce a consistent style in a code base is important, because
+once the maintainers of that code base have become accustomed to that style, they won&#8217;t have to &#8220;readjust&#8221; their eyes to get used to. If the auto formatter for a programming language is nearly ubiquitous amongst those who use it, such as with Golang&#8217;s [gofmt](http://research.swtch.com/gofmt), then even better &#8211; users across the language will be able to read anyone&#8217;s elses code that also uses the formatter.
+
+While auto formatters such as Scalariform can&#8217;t check everything that is in a styleguide
+(it won&#8217;t automatically reformat your imperative, state-mutating code into a functional style automatically), it will take care of the visual aesthetics formatting problem for you.
+
+
+#### Scalariform Dillemas 
+Scalariform has many configuration options, which goes against the design philosophy
+of having one canonical representation so that everyone can quickly get accustomed to the same formatting. It also happens to significantly complicate the actual Scalariform formatting code. With Scalariform, there is one
+global shared state &#8211; the output source code. More configuration options means
+more potentials to clash, and more special cases.
+
+Unfortunately, Scala programmers come from many different backgrounds, and there isn&#8217;t
+a global consensus on what formatting styles programmers prefer. 
+
+When I was gathering feedback for new Scalariform features, I posted an informal poll on Reddit, to gather feedback about 3 different formatting styles:
+
+<figure class='code'><figcaption><span>Style One</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">definition</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">a</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="n">bb</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'>  <span class="n">ccc</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
+</span><span class='line'><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><figcaption><span>Style Two</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">definition</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">a</span><span class="k">:</span>   <span class="kt">Int</span>     <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="n">bb</span><span class="k">:</span>  <span class="kt">String</span>  <span class="o">=</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'>  <span class="n">ccc</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
+</span><span class='line'><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><figcaption><span>Style Three</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">definition</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">a</span><span class="k">:</span> <span class="kt">Int</span>     <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="n">bb</span><span class="k">:</span> <span class="kt">String</span>  <span class="o">=</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'>  <span class="n">ccc</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span>
+</span><span class='line'><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+I was half-expecting everyone to say they prefered `Style Two`, but of course that wasn&#8217;t the case. `Style One` was the most popular choice. `Style Two` was the second most popular,
+and `Style Three` was by far the least &#8211; not a single person said they preferred this one (although a few said they didn&#8217;t mind any of the options).
+
+I also concluded that a strong contributing factor on which style people prefer is
+strongly related to just what they&#8217;re used to reading &#8211; Golang&#8217;s gofmt happens to format
+code in something similar to `Style Two`, and happens to be used by roughly 70% of all golang projects. If this really is the main factor, then it doesn&#8217;t really make sense
+to  &#8211;>
+
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
 <time datetime="2014-01-26T20:58:00-08:00" data-updated="true" itemprop="datePublished">Jan 26<span>th</span>, 2014</time></div>
 		<div class="tags">
 
 
-	<a class='category' href='/blog/categories/essay/'>essay</a>, <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/maintainability/'>maintainability</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
+	<a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/maintainability/'>maintainability</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
 
 </div>
 		
@@ -143,7 +780,7 @@
 <p>If you are lucky enough to be able to choose the programming language for a new project,
 this section might provide some insight on how it might impact the future of your code base.</p>
 
-<h2>Choose your programming languages wisely</h2>
+<h2>Choose Your Programming Languages Wisely</h2>
 
 <p>This article focuses only on the technical details of programming languages and their
 effects on maintainability. It won&rsquo;t be covering topics such as a language&rsquo;s popularity, tooling,
@@ -708,7 +1345,7 @@ to warrant it&rsquo;s own article.</p>
 		<div class="tags">
 
 
-	<a class='category' href='/blog/categories/essay/'>essay</a>, <a class='category' href='/blog/categories/maintainability/'>maintainability</a>
+	<a class='category' href='/blog/categories/maintainability/'>maintainability</a>
 
 </div>
 		
@@ -782,7 +1419,7 @@ have done. Open source means more contributors (if it&rsquo;s good enough for ot
 more dogfooding. Or, if it&rsquo;s <em>really</em> good, you could sell the service, like Amazon has done
 with AWS.</p>
 
-<h3>Some Basic Service to Service Examples</h3>
+<h2>Some Basic Service to Service Examples</h2>
 
 <p>An example of SOA that&rsquo;s perhaps more well known is the movement of
 generating GUIs from the server to the client, and having the server side code serve pure data
@@ -797,7 +1434,7 @@ Now if users don&rsquo;t like your GUI, they can build their own.</p>
 <p>So what if you aren&rsquo;t building servers or applications that have to talk over the network? The same principle of splitting things into separate code bases and communicating through a common
 protocol can be applied to smaller scale programs as well.</p>
 
-<h3>The future of IDEs</h3>
+<h2>The Future of IDEs</h2>
 
 <p>Ever used an IDE such as Eclipse, Intellij Idea, or Visual Studio? If you&rsquo;ve ever thought to yourself,
 <em>&ldquo;man, I really like the IDE auto completion, incremental compilation, and refactoring tools,
@@ -836,7 +1473,7 @@ over a protocol to any capable text editor &mdash; the daemon receives code from
 		<div class="tags">
 
 
-	<a class='category' href='/blog/categories/essay/'>essay</a>, <a class='category' href='/blog/categories/maintainability/'>maintainability</a>
+	<a class='category' href='/blog/categories/maintainability/'>maintainability</a>
 
 </div>
 		
@@ -890,12 +1527,12 @@ I&rsquo;ve learned many lessons in having to work with a code base of that size,
 this to help software engineers, including myself, to think about code maintainability to the same degree they might
 think about code correctness or performance, if not higher.</p>
 
-<h2>Basics</h2>
+<h2>The Basics</h2>
 
 <p>Let&rsquo;s get the obvious software practices that happen to help code maintainability
 out of the way first. These should be familiar with anyone who&rsquo;s been coding for a while.</p>
 
-<h3>Don&rsquo;t Repeat Yourself</h3>
+<h4>Don&rsquo;t Repeat Yourself</h4>
 
 <p>What do you do when you&rsquo;ve got a function duplicated 100 times over 100 different
 files, and you want to modify the behavior of that common code? Refactor the common code into one function somewhere,
@@ -913,7 +1550,7 @@ it causes maintenance headaches later on.</p>
 <p>Sometimes this isn&rsquo;t always a good thing, especially if the code refactoring involves
 metaprogramming or other language features that tend to make code less readable.</p>
 
-<h3>Eat Your Own Dog Food (Dogfooding)</h3>
+<h4>Eat Your Own Dog Food (Dogfooding)</h4>
 
 <p>If nobody has ever used your application before shipping it to customers, how can
 you be sure it&rsquo;s any good?</p>
@@ -932,7 +1569,7 @@ products that are already good (icecream) don&rsquo;t need to be improved.</p>
 <p>Dogfooding doesn&rsquo;t have to be limited to using something at the scale of products, though.
 Testing could be considered a form of dogfooding&hellip;</p>
 
-<h3>Write Unit Tests</h3>
+<h4>Write Unit Tests</h4>
 
 <p>How can you refactor and change code reliably if there are no checks in place to
 make sure the application is working as expected after the change?</p>
@@ -949,14 +1586,14 @@ integration tests, and then it&rsquo;s your manual testers, then customers. Each
 along the way is typically slower than the previous, with
 <a href="http://blogs.msdn.com/cfs-filesystemfile.ashx/__key/communityserver-blogs-components-weblogfiles/00-00-01-32-02-metablogapi/7317.image_5F00_0F65063B.png%20just%20ship%20it">having customers do your testing</a> generally much slower than running a unit test.</p>
 
-<h3>Document Your Code</h3>
+<h4>Document Your Code</h4>
 
 <p>Sometimes it&rsquo;s a lot easier to explain in words what your code does than
 it is to try to read the code itself, especially if your programming language is not
 particularly concise (more on this in part 3). A few comments here and there
 can greatly increase the understandability of your code.</p>
 
-<h3>Do Code Reviews and Design Reviews</h3>
+<h4>Do Code Reviews and Design Reviews</h4>
 
 <p>So how do you go about figuring out what code needs to be better documented?</p>
 

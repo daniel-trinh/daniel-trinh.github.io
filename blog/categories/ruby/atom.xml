@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2014-01-31T23:23:30-08:00</updated>
+  <updated>2014-02-07T00:43:41-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[Daniel Trinh]]></name>
@@ -23,7 +23,7 @@
 <p>If you are lucky enough to be able to choose the programming language for a new project,
 this section might provide some insight on how it might impact the future of your code base.</p>
 
-<h2>Choose your programming languages wisely</h2>
+<h2>Choose Your Programming Languages Wisely</h2>
 
 <p>This article focuses only on the technical details of programming languages and their
 effects on maintainability. It won&rsquo;t be covering topics such as a language&rsquo;s popularity, tooling,

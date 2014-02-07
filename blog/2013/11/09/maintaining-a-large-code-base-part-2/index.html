@@ -9,7 +9,7 @@
 	<meta name="author" content="Daniel Trinh">
 
 	
-	<meta name="description" content="Nov 9th, 2013 essay, maintainability Maintaining a Large Code Base, Part 2: Service Oriented Architecture Previous Part: Backstory and the Basics &hellip;">
+	<meta name="description" content="Nov 9th, 2013 maintainability Maintaining a Large Code Base, Part 2: Service Oriented Architecture Previous Part: Backstory and the Basics How do &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -60,12 +60,27 @@
   <h1><a href="/">Daniel Trinh</a></h1>
   
 </hgroup>
-
-<nav id="main-nav"><ul class="main-navigation">
+<nav id="main-nav"><hgroup>
+  <h2>Articles</h2>
+  
+</hgroup>
+<ul class="main-navigation">
   <li><a href="/blog/categories">Categories</a></li>
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
 
+<hgroup>
+  <h2 class="main-navigation">
+    <a href="/blog/categories/project/">Open Source Projects</a>
+  </h2>
+</hgroup>
+<ul>
+  <li>
+    <a href="/blog/2014/02/06/converting-ocremixs-rss-to-a-twitter-feed/">OCRemix RSS to Twitter</a></li>
+  <li>
+    <a href="/blog/2014/02/05/improving-scalariform/">Scalariform</a>
+  </li>
+</ul>
 
 <section class="aboutme">
   <p>
@@ -126,7 +141,7 @@
 		<div class="tags">
 
 
-	<a class='category' href='/blog/categories/essay/'>essay</a>, <a class='category' href='/blog/categories/maintainability/'>maintainability</a>
+	<a class='category' href='/blog/categories/maintainability/'>maintainability</a>
 
 </div>
 		
@@ -199,7 +214,7 @@ have done. Open source means more contributors (if it&rsquo;s good enough for ot
 more dogfooding. Or, if it&rsquo;s <em>really</em> good, you could sell the service, like Amazon has done
 with AWS.</p>
 
-<h3>Some Basic Service to Service Examples</h3>
+<h2>Some Basic Service to Service Examples</h2>
 
 <p>An example of SOA that&rsquo;s perhaps more well known is the movement of
 generating GUIs from the server to the client, and having the server side code serve pure data
@@ -214,7 +229,7 @@ Now if users don&rsquo;t like your GUI, they can build their own.</p>
 <p>So what if you aren&rsquo;t building servers or applications that have to talk over the network? The same principle of splitting things into separate code bases and communicating through a common
 protocol can be applied to smaller scale programs as well.</p>
 
-<h3>The future of IDEs</h3>
+<h2>The Future of IDEs</h2>
 
 <p>Ever used an IDE such as Eclipse, Intellij Idea, or Visual Studio? If you&rsquo;ve ever thought to yourself,
 <em>&ldquo;man, I really like the IDE auto completion, incremental compilation, and refactoring tools,
@@ -232,16 +247,7 @@ over a protocol to any capable text editor &mdash; the daemon receives code from
 
 </article>
 
-	<div class="share">
-	<div class="addthis_toolbox addthis_default_style ">
 	
-	
-	
-	<a class="addthis_counter addthis_pill_style"></a>
-	</div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
-</div>
-
 
 </div>
 			</div>
