@@ -150,9 +150,9 @@
 	<h1 class="title" itemprop="name">Converting the OverClocked Remix RSS to a Twitter Feed</h1>
 	<div class="entry-content" itemprop="articleBody"><p><a href="http://ocremix.org">OverClocked Remix (OCRemix)</a> is a website dedicated to serving high quality remixes of music from video games. The RSS feed is occasionally updated with the latest ten new songs that are posted on the site.</p>
 
-<p>This post is about a project I wrote a year ago &mdash; it posts new songs from its RSS feed to a Twitter feed. The results can be seen at <a href="https://twitter.com/newOCRemixes">@newOCRemixes</a> on Twitter.</p>
+<p>This post is about a server daemon project I wrote a year ago &mdash; it polls the RSS feed of OCRemix periodically, and converts new results to a Twitter feed. The results can be seen at <a href="https://twitter.com/newOCRemixes">@newOCRemixes</a> on Twitter. It&rsquo;s been running on Heroku 24/7 for the past year without any problems. Source code is <a href="http://github.com/daniel-trinh/ocremix">here</a>.</p>
 
-<p>The rest of this post goes into the design and development of this project, so if that doesn&rsquo;t sound interesting, now is a good time to hop off this train.</p>
+<p>The rest of this post goes into the design and development of this project, so if that doesn&rsquo;t sound interesting to you, now is a good time to hop off this train.</p>
 
 <h2>Motivation and design</h2>
 
@@ -225,7 +225,7 @@ writeupUrl - Official OCRemix link with remix information and a download link.
 
 <p>The actual project was implemented using Scala. The main libraries used were
 Dispatch for OAuth and talking with Twitter&rsquo;s API, and <a href="akka.io">Akka</a> for the periodic
-polling of the RSS feed. It&rsquo;s currently deployed on Heroku, where it has been running 24/7 for the past year. Source code is <a href="http://github.com/daniel-trinh/ocremix">here</a>.</p>
+polling of the RSS feed.</p>
 
 <h4>Fitting Info into a Tweet</h4>
 
