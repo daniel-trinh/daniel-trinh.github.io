@@ -4,7 +4,7 @@
   <title><![CDATA[Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2015-01-27T23:18:30-08:00</updated>
+  <updated>2015-02-10T23:01:14-08:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[Daniel Trinh]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Numbers Every Software Engineer Should Know]]></title>
     <link href="http://danieltrinh.com/blog/2014/02/07/numbers-every-software-engineer-should-know/"/>
-    <updated>2014-02-07T21:04:00-08:00</updated>
+    <updated>2014-02-07T21:05:00-08:00</updated>
     <id>http://danieltrinh.com/blog/2014/02/07/numbers-every-software-engineer-should-know</id>
     <content type="html"><![CDATA[<p>This article is a collection of runtime and memory usage numbers that
 might be useful to keep in mind when building performance critical software.</p>
