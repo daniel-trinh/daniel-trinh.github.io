@@ -9,11 +9,18 @@ Add table of Contents to articles
 
 Add recent posts
 
-Add "projects" section
-
 Add "articles" section
 
+## Generating articles
+`bundle exec rake new_post`
+
+## Previewing
+`bundle exec rake preview`
+
 ## Deploying / Updating articles:
-rake generate
-rake deploy
+`bundle exec rake generate`
+`bundle exec rake deploy`
 (Enter username/password)
+
+## Adding projects to nav
+Modify `.../_custom/navigation.html`

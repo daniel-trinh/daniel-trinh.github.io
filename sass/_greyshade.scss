@@ -5,6 +5,8 @@ html {
 }
 
 body {
+	// hack to get around bug in webkit. see  
+	// http://stackoverflow.com/questions/10522054/weird-rendering-bug-in-desktop-webkit-safari-chrome-with-absolutely-positioned
 	background: #3D4349;
 	font-family: $sans;
 	// font-family: "Alegreya", Georgia, Cambria, "Times New Roman", Times, serif;
