@@ -29,12 +29,18 @@
         <lastmod>2016-02-25T17:01:51-08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://danieltrinh.com/blog/2016/07/12/filtering-duplicate-messages-in-twitch-chat/
+        </loc>
+        <lastmod>2016-07-12T15:03:25-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://danieltrinh.com/about/</loc>
         <lastmod>2013-11-10T21:35:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://danieltrinh.com/blog/archives/</loc>
-        <lastmod>2016-02-25T17:01:51-08:00</lastmod>
+        <lastmod>2016-07-12T15:03:25-07:00</lastmod>
     </url>
     <url>
         <loc>http://danieltrinh.com/blog/categories/</loc>
@@ -42,7 +48,7 @@
     </url>
     <url>
         <loc>http://danieltrinh.com/</loc>
-        <lastmod>2016-02-25T17:01:51-08:00</lastmod>
+        <lastmod>2016-07-12T15:03:25-07:00</lastmod>
     </url>
     <url>
         <loc>http://danieltrinh.com/robots.txt</loc>
