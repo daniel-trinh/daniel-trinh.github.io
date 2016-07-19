@@ -4,7 +4,7 @@
   <title><![CDATA[Category: golang | Daniel Trinh]]></title>
   <link href="http://danieltrinh.com/blog/categories/golang/atom.xml" rel="self"/>
   <link href="http://danieltrinh.com/"/>
-  <updated>2016-07-19T12:46:38-07:00</updated>
+  <updated>2016-07-19T12:50:47-07:00</updated>
   <id>http://danieltrinh.com/</id>
   <author>
     <name><![CDATA[Daniel Trinh]]></name>
@@ -18,7 +18,7 @@
     <link href="http://danieltrinh.com/blog/2016/07/12/filtering-duplicate-messages-in-twitch-chat/"/>
     <updated>2016-07-12T12:14:00-07:00</updated>
     <id>http://danieltrinh.com/blog/2016/07/12/filtering-duplicate-messages-in-twitch-chat</id>
-    <content type="html"><![CDATA[<p>Recently, I built this command line interface (CLI) app for fun (click the image to see a higher resolution video).</p>
+    <content type="html"><![CDATA[<p>I recently built this toy command line interface (CLI) app for fun. You can see a higher resolution video of it in action by clicking the image below.</p>
 
 <p><a href="https://www.youtube.com/watch?v=i8sRO7_qvOY" title="Twitch Chat Filterer"><img src="http://i.imgur.com/m50Kii1.gif" alt="Twitch Chat Filterer" /></a></p>
 
