@@ -6,7 +6,7 @@ comments: true
 categories: golang project
 ---
 
-Recently, I built this command line interface (CLI) app for fun (click the image to see a higher resolution video).
+I recently built this toy command line interface (CLI) app for fun. You can see a higher resolution video of it in action by clicking the image below.
 
 [![Twitch Chat Filterer](http://i.imgur.com/m50Kii1.gif)](https://www.youtube.com/watch?v=i8sRO7_qvOY "Twitch Chat Filterer")
 
